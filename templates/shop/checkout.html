@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | LUVORA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Checkout</h1>
+    
+    <div class="row">
+        <!-- Checkout Form -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-3">
+                        <i class="bi bi-truck"></i> Shipping Information
+                    </h5>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">{{ form.customer_name.label }}</label>
+                                {{ form.customer_name }}
+                                {% if form.customer_name.errors %}
+                                <div class="text-danger small">{{ form.customer_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.customer_email.label }}</label>
+                                {{ form.customer_email }}
+                                {% if form.customer_email.errors %}
+                                <div class="text-danger small">{{ form.customer_email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.customer_phone.label }}</label>
+                                {{ form.customer_phone }}
+                                {% if form.customer_phone.errors %}
+                                <div class="text-danger small">{{ form.customer_phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">{{ form.shipping_address_line1.label }}</label>
+                                {{ form.shipping_address_line1 }}
+                                {% if form.shipping_address_line1.errors %}
+                                <div class="text-danger small">{{ form.shipping_address_line1.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">{{ form.shipping_address_line2.label }}</label>
+                                {{ form.shipping_address_line2 }}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.shipping_city.label }}</label>
+                                {{ form.shipping_city }}
+                                {% if form.shipping_city.errors %}
+                                <div class="text-danger small">{{ form.shipping_city.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.shipping_state.label }}</label>
+                                {{ form.shipping_state }}
+                                {% if form.shipping_state.errors %}
+                                <div class="text-danger small">{{ form.shipping_state.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.shipping_pincode.label }}</label>
+                                {{ form.shipping_pincode }}
+                                {% if form.shipping_pincode.errors %}
+                                <div class="text-danger small">{{ form.shipping_pincode.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">{{ form.customer_notes.label }}</label>
+                                {{ form.customer_notes }}
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-credit-card"></i> Proceed to Payment
+                            </button>
+                            <a href="{% url 'shop:cart_detail' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Cart
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-3">Order Summary</h5>
+                    
+                    <!-- Cart Items -->
+                    <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+                        {% for item in cart %}
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                            <div class="flex-grow-1">
+                                <p class="mb-0 small">{{ item.title }}</p>
+                                <p class="mb-0 text-muted small">Qty: {{ item.quantity }} × ₹{{ item.price }}</p>
+                            </div>
+                            <span class="fw-bold">₹{{ item.total_price }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Totals -->
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal</span>
+                        <span>₹{{ cart.get_total_price }}</span>
+                    </div>
+                    
+                    {% if cart.coupon %}
+                    <div class="d-flex justify-content-between text-success mb-2">
+                        <span><i class="bi bi-tag-fill"></i> Discount</span>
+                        <span>-₹{{ cart.get_discount }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span class="text-success">FREE</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-0">
+                        <span class="fw-bold h5">Total</span>
+                        <span class="fw-bold h5 text-primary">
+                            ₹{{ cart.get_total_price_after_discount }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

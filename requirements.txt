@@ -1,0 +1,33 @@
+# Core Django & Wagtail
+Django>=4.2,<5.0
+wagtail>=5.2,<6.0
+
+# Database drivers
+cx_Oracle>=8.3.0  # Oracle database
+psycopg2-binary>=2.9.9  # PostgreSQL (optional for dev)
+
+# Production server
+gunicorn>=21.2.0
+whitenoise>=6.6.0  # Static file serving
+
+# Payment gateway
+razorpay>=1.4.1
+
+# Image handling
+Pillow>=10.1.0
+
+# Environment management
+python-decouple>=3.8
+
+# Monitoring & Error tracking (optional)
+sentry-sdk>=1.39.1
+
+# Storage (for production media files)
+django-storages[boto3]>=1.14.2
+
+# Utilities
+django-extensions>=3.2.3
+django-cors-headers>=4.3.1
+
+# Development
+django-debug-toolbar>=4.2.0

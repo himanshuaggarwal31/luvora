@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart | LUVORA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Shopping Cart</h1>
+    
+    {% if cart %}
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Cart Items -->
+            {% for item in cart_items %}
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            {% if item.product.main_image %}
+                            <img src="{{ item.product.main_image.file.url }}" 
+                                 class="img-fluid rounded" alt="{{ item.title }}">
+                            {% else %}
+                            <img src="https://via.placeholder.com/100" 
+                                 class="img-fluid rounded" alt="{{ item.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <h5 class="mb-1">{{ item.title }}</h5>
+                            <p class="text-muted small mb-0">SKU: {{ item.sku }}</p>
+                            <p class="text-primary mb-0">₹{{ item.price }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <form action="{% url 'shop:cart_add' item.product.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <div class="input-group input-group-sm">
+                                    {{ item.update_quantity_form.quantity }}
+                                    {{ item.update_quantity_form.override }}
+                                    <button type="submit" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <p class="fw-bold mb-1">₹{{ item.total_price }}</p>
+                            <form action="{% url 'shop:cart_remove' item.product.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link btn-sm text-danger p-0">
+                                    <i class="bi bi-trash"></i> Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Cart Summary -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-3">Order Summary</h5>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal ({{ cart.get_total_quantity }} items)</span>
+                        <span>₹{{ cart.get_total_price }}</span>
+                    </div>
+                    
+                    {% if cart.coupon %}
+                    <div class="d-flex justify-content-between text-success mb-2">
+                        <span>
+                            <i class="bi bi-tag-fill"></i> Discount ({{ cart.coupon.code }})
+                        </span>
+                        <span>-₹{{ cart.get_discount }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-muted">{{ cart.coupon.code }}</span>
+                        <a href="{% url 'shop:coupon_remove' %}" class="btn btn-link btn-sm p-0 text-danger">
+                            Remove
+                        </a>
+                    </div>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total</span>
+                        <span class="fw-bold h5 text-primary mb-0">
+                            ₹{{ cart.get_total_price_after_discount }}
+                        </span>
+                    </div>
+                    
+                    <!-- Coupon Form -->
+                    {% if not cart.coupon %}
+                    <form action="{% url 'shop:coupon_apply' %}" method="post" class="mb-3">
+                        {% csrf_token %}
+                        <div class="input-group input-group-sm">
+                            {{ coupon_form.code }}
+                            <button type="submit" class="btn btn-outline-secondary">
+                                Apply
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                    
+                    {% if is_cart_valid %}
+                    <a href="{% url 'shop:checkout' %}" class="btn btn-primary w-100 mb-2">
+                        <i class="bi bi-lock-fill"></i> Proceed to Checkout
+                    </a>
+                    {% else %}
+                    <button class="btn btn-secondary w-100 mb-2" disabled>
+                        Please fix cart issues
+                    </button>
+                    {% endif %}
+                    
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-left"></i> Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Cart -->
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x display-1 text-muted"></i>
+        <h3 class="mt-3">Your cart is empty</h3>
+        <p class="text-muted mb-4">Start shopping to add items to your cart</p>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary">
+            <i class="bi bi-bag"></i> Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

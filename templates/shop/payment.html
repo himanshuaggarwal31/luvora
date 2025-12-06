@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Payment | LUVORA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-credit-card display-1 text-primary"></i>
+                        <h3 class="fw-bold mt-3">Complete Your Payment</h3>
+                        <p class="text-muted">Order #{{ order.order_id }}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Order Total:</span>
+                            <span class="fw-bold h4 text-primary">₹{{ order.total }}</span>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-2">Shipping To:</h6>
+                        <p class="text-muted mb-1">{{ order.customer_name }}</p>
+                        <p class="text-muted small mb-0">
+                            {{ order.shipping_address_line1 }}{% if order.shipping_address_line2 %}, {{ order.shipping_address_line2 }}{% endif %}<br>
+                            {{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_pincode }}
+                        </p>
+                    </div>
+                    
+                    {% if test_mode %}
+                    <!-- Test Mode -->
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        <strong>Test Mode:</strong> Razorpay is not configured. 
+                        Configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in your .env file.
+                    </div>
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-primary w-100">
+                        Return to Shop
+                    </a>
+                    {% else %}
+                    <!-- Razorpay Payment Button -->
+                    <button id="rzp-button" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-lock-fill"></i> Pay ₹{{ order.total }} with Razorpay
+                    </button>
+                    
+                    <p class="text-center text-muted small mt-3">
+                        <i class="bi bi-shield-check"></i> Secure payment powered by Razorpay
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if not test_mode %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById('rzp-button').onclick = function(e) {
+    e.preventDefault();
+    
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ amount }}",
+        "currency": "{{ currency }}",
+        "name": "LUVORA",
+        "description": "Order #{{ order.order_id }}",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response) {
+            // Create form and submit payment details
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ callback_url }}";
+            
+            var inputs = {
+                'razorpay_payment_id': response.razorpay_payment_id,
+                'razorpay_order_id': response.razorpay_order_id,
+                'razorpay_signature': response.razorpay_signature
+            };
+            
+            for (var key in inputs) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = inputs[key];
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+        },
+        "prefill": {
+            "name": "{{ order.customer_name }}",
+            "email": "{{ order.customer_email }}",
+            "contact": "{{ order.customer_phone }}"
+        },
+        "theme": {
+            "color": "#8B4513"
+        }
+    };
+    
+    var rzp = new Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+        alert('Payment failed: ' + response.error.description);
+    });
+    rzp.open();
+};
+</script>
+{% endif %}
+{% endblock %}
