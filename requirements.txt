@@ -1,5 +1,5 @@
 # Core Django & Wagtail
-Django>=4.2,<5.0
+Django>=5.0,<5.2  # Django 5.0+ required for Python 3.14 compatibility
 wagtail>=6.0,<7.0  # Upgraded for Python 3.14 compatibility
 
 # Database drivers
