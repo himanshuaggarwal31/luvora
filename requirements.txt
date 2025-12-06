@@ -1,9 +1,9 @@
 # Core Django & Wagtail
 Django>=4.2,<5.0
-wagtail>=5.2,<6.0
+wagtail>=6.0,<7.0  # Upgraded for Python 3.14 compatibility
 
 # Database drivers
-cx_Oracle>=8.3.0  # Oracle database
+oracledb  # Oracle database
 psycopg2-binary>=2.9.9  # PostgreSQL (optional for dev)
 
 # Production server
@@ -14,7 +14,7 @@ whitenoise>=6.6.0  # Static file serving
 razorpay>=1.4.1
 
 # Image handling
-Pillow>=10.1.0
+Pillow>=10.0.0,<12.0.0  # Compatible with Wagtail 6.x and Python 3.14
 
 # Environment management
 python-decouple>=3.8

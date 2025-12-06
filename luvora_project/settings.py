@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail',
     'wagtail.contrib.settings',
-    'wagtail.contrib.modeladmin',
+    # Note: wagtail.contrib.modeladmin was removed in Wagtail 6.0
     
     'modelcluster',
     'taggit',
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # Third party apps
     'django_extensions',
     'corsheaders',
+    'debug_toolbar',  # Django Debug Toolbar
     
     # Local apps
     'shop.apps.ShopConfig',
