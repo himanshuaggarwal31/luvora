@@ -2,6 +2,7 @@
 Shopping cart functionality using Django sessions
 """
 from decimal import Decimal
+from copy import deepcopy
 from django.conf import settings
 from .models import ProductPage, Coupon
 
@@ -85,7 +86,8 @@ class Cart:
         product_ids = self.cart.keys()
         # Get products from database
         products = ProductPage.objects.filter(id__in=product_ids)
-        cart = self.cart.copy()
+        # Use deepcopy to avoid modifying the original cart dict in session
+        cart = deepcopy(self.cart)
         
         for product in products:
             cart[str(product.id)]['product'] = product
