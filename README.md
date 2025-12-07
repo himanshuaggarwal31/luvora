@@ -1,32 +1,34 @@
 # LUVORA - Premium E-commerce Platform
 
-A complete, production-ready e-commerce platform built with **Django** and **Wagtail CMS**, featuring integrated payment processing, inventory management, and a modern Bootstrap-based UI.
+A complete, production-ready e-commerce platform built with **Django 5.1** and **Wagtail CMS 6.4**, featuring integrated payment processing, automated invoice generation, email notifications, and a modern Bootstrap-based UI.
 
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![Django](https://img.shields.io/badge/Django-4.2-green)
-![Wagtail](https://img.shields.io/badge/Wagtail-5.2-teal)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Django](https://img.shields.io/badge/Django-5.1-green)
+![Wagtail](https://img.shields.io/badge/Wagtail-6.4-teal)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ## 🌟 Features
 
-### Core Functionality
+### Core E-commerce
 - **🛍️ Product Management**: Full CRUD with Wagtail CMS integration
 - **🛒 Shopping Cart**: Session-based cart with real-time updates
-- **💳 Payment Gateway**: Razorpay integration for secure payments
-- **🎟️ Coupon System**: Percentage and fixed-amount discounts
-- **📦 Order Management**: Complete order tracking and history
-- **📊 Inventory Tracking**: Real-time stock management
+- **💳 Payment Gateway**: Razorpay integration for secure payments (UPI, Cards, Net Banking)
+- **📄 Invoice Generation**: Professional PDF invoices with ReportLab
+- **📧 Email Notifications**: Automated order confirmations with invoice attachments
+- **🎟️ Coupon System**: Percentage and fixed-amount discounts with validation
+- **📦 Order Management**: Complete order tracking and status updates
+- **📊 Inventory Tracking**: Real-time stock management with backorder support
 - **🔍 Search & Filter**: Category-based product filtering
 - **📱 Responsive Design**: Mobile-first Bootstrap 5 UI
 
 ### Technical Features
-- **🗄️ Oracle Database Support**: Native Oracle DB integration (or PostgreSQL)
+- **🗄️ Database Support**: SQLite (dev), PostgreSQL, Oracle
 - **🐳 Docker Ready**: Complete containerization with Docker Compose
 - **🔒 Security**: HTTPS, CSRF protection, secure payment verification
-- **📧 Email Notifications**: Order confirmation emails
-- **🔧 Environment-based Config**: 12-factor app methodology
 - **📝 Comprehensive Logging**: Application and payment logging
-- **🚀 Production Ready**: Gunicorn + Nginx deployment
+- **🚀 Production Ready**: Gunicorn + Nginx + WhiteNoise deployment
+- **🔧 Environment-based Config**: 12-factor app methodology
+- **🎨 CMS-Powered**: Wagtail CMS for content management
 
 ---
 
@@ -46,23 +48,55 @@ A complete, production-ready e-commerce platform built with **Django** and **Wag
 
 ## 🔧 Prerequisites
 
-- **Python 3.10+** (3.11 recommended)
+- **Python 3.12+** (Python 3.14 not yet supported - see [PYTHON_VERSION_ISSUE.md](PYTHON_VERSION_ISSUE.md))
 - **pip** and **virtualenv**
 - **Git**
-- **Oracle Instant Client** (if using Oracle DB)
-- **Docker & Docker Compose** (for containerized deployment)
-- **Razorpay Account** (for payment processing)
+- **Oracle Instant Client** (optional, if using Oracle DB)
+- **Docker & Docker Compose** (optional, for containerized deployment)
+- **Razorpay Account** (optional, for payment processing - works in test mode without)
 
 ---
 
 ## 🚀 Quick Start
 
-### Option 1: Local Development (Virtual Environment)
+### Windows Quick Setup (Recommended)
 
 ```powershell
 # Clone the repository
-cd c:\Himanshu\REPOS\luvora
+git clone https://github.com/himanshuaggarwal31/luvora.git
+cd luvora
 
+# Run the automated setup script
+.\setup.bat
+
+# The script will:
+# - Create virtual environment with Python 3.12
+# - Install all dependencies
+# - Configure SQLite database
+# - Run migrations
+# - Create static directory
+# - Prompt for superuser creation
+```
+
+After setup completes:
+```powershell
+# Activate virtual environment
+.venv\Scripts\activate
+
+# Create page structure (Home, Shop, Products)
+python setup_pages.py
+
+# Run development server
+python manage.py runserver
+```
+
+Visit: **http://127.0.0.1:8000**
+
+Admin Panel: **http://127.0.0.1:8000/admin/**
+
+### Manual Setup
+
+```powershell
 # Create virtual environment
 python -m venv .venv
 .venv\Scripts\activate
@@ -73,46 +107,33 @@ pip install -r requirements.txt
 # Copy environment file
 copy .env.example .env
 
-# Edit .env with your configurations
-# (Use notepad, VS Code, or any text editor)
-
 # Run migrations
 python manage.py migrate
 
 # Create superuser
 python manage.py createsuperuser
 
-# Collect static files
-python manage.py collectstatic
+# Create page structure
+python setup_pages.py
 
 # Run development server
 python manage.py runserver
 ```
 
-Visit: **http://localhost:8000**
-
-### Option 2: Docker Deployment (Recommended for Production)
-
-```powershell
-# Copy environment file
-copy .env.example .env
-
-# Edit .env with your configurations
-
-# Run deployment script
-.\deploy.bat
-
-# Create superuser (in container)
-docker-compose exec web python manage.py createsuperuser
-```
-
-Visit: **http://localhost**
-
 ---
 
 ## 🗄️ Database Setup
 
-### PostgreSQL (Recommended for Development)
+### SQLite (Default - Recommended for Development)
+
+No configuration needed! SQLite is pre-configured in `.env` and works out of the box.
+
+```env
+DB_ENGINE=django.db.backends.sqlite3
+DB_NAME=db.sqlite3
+```
+
+### PostgreSQL (Recommended for Production)
 
 ```bash
 # Install PostgreSQL
@@ -167,65 +188,104 @@ DEBUG=True
 SECRET_KEY=your-secret-key-here
 ALLOWED_HOSTS=localhost,127.0.0.1
 
-# Database (choose one)
-# PostgreSQL
-DB_ENGINE=django.db.backends.postgresql
-DB_NAME=luvora_db
-DB_USER=luvora_user
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
+# Database (SQLite - Default)
+DB_ENGINE=django.db.backends.sqlite3
+DB_NAME=db.sqlite3
 
-# Oracle
-# DB_ENGINE=django.db.backends.oracle
-# DB_NAME=hostname:1521/service_name
-# DB_USER=oracle_user
-# DB_PASSWORD=oracle_password
+# Database (PostgreSQL - Alternative)
+# DB_ENGINE=django.db.backends.postgresql
+# DB_NAME=luvora_db
+# DB_USER=luvora_user
+# DB_PASSWORD=your_password
+# DB_HOST=localhost
+# DB_PORT=5432
 
-# Razorpay
-RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxx
-RAZORPAY_KEY_SECRET=your_razorpay_secret
-RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
+# Razorpay (Optional - Works in test mode without keys)
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
 
-# Email
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-DEFAULT_FROM_EMAIL=LUVORA <noreply@luvora.com>
+# Email (Console backend for development)
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+DEFAULT_FROM_EMAIL=noreply@luvora.com
 
-# AWS S3 (Production Media Storage)
-USE_S3=False
-# AWS_ACCESS_KEY_ID=your_access_key
-# AWS_SECRET_ACCESS_KEY=your_secret_key
-# AWS_STORAGE_BUCKET_NAME=your_bucket_name
-# AWS_S3_REGION_NAME=ap-south-1
+# Email (Gmail SMTP for production)
+# EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+# EMAIL_HOST=smtp.gmail.com
+# EMAIL_PORT=587
+# EMAIL_USE_TLS=True
+# EMAIL_HOST_USER=your-email@gmail.com
+# EMAIL_HOST_PASSWORD=your-app-password
 
 # Site
-SITE_URL=http://localhost:8000
+SITE_URL=http://127.0.0.1:8000
 WAGTAIL_SITE_NAME=LUVORA
 ```
 
 ### Razorpay Setup
 
+**For Development/Testing:**
+- No API keys needed! The system works in test mode
+- Checkout flow works, but no actual payment processing
+- Perfect for testing the complete e-commerce flow
+
+**For Production:**
 1. Sign up at https://razorpay.com
 2. Get API keys from Dashboard → Settings → API Keys
-3. Add keys to `.env` file
+3. Add keys to `.env` file:
+   ```env
+   RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxx
+   RAZORPAY_KEY_SECRET=your_razorpay_secret
+   ```
 4. For webhooks: Dashboard → Webhooks → Add webhook URL
    - URL: `https://yourdomain.com/shop/payment/callback/`
    - Events: `payment.authorized`, `payment.failed`
+
+See [PAYMENT_SETUP.md](PAYMENT_SETUP.md) for detailed payment integration guide.
 
 ---
 
 ## 💻 Development Workflow
 
-### Creating Products
+### Initial Page Setup
 
-1. Access Wagtail admin: http://localhost:8000/admin/
+After installing, create the page structure:
+
+```bash
+python setup_pages.py
+```
+
+This creates:
+- Home page (site root)
+- Shop page (product listing)
+- Sample products with images and pricing
+
+### Creating Products via CMS
+
+1. Access Wagtail admin: http://127.0.0.1:8000/admin/
 2. Login with superuser credentials
-3. Navigate to Pages → Add child page → Product Index Page
-4. Under Product Index, add Product Pages
+3. Navigate to Pages → Shop
+4. Click "Add child page" → Product
+5. Fill in product details:
+   - Title, SKU, Price
+   - Description and images
+   - Stock quantity
+   - Category (optional)
+
+### Testing Payments & Invoices
+
+```bash
+# Place an order through the website, then test invoice generation:
+python manage.py test_invoice ORDER_ID_HERE --save
+
+# Test email with invoice:
+python manage.py test_invoice ORDER_ID_HERE --email
+```
+
+The invoice will be:
+- Saved as PDF (with `--save`)
+- Sent via email (with `--email`)
+- Displayed in terminal if using console email backend
 
 ### Creating Categories
 
@@ -358,22 +418,44 @@ luvora/
 │   ├── views.py           # View logic
 │   ├── forms.py           # Django forms
 │   ├── cart.py            # Cart functionality
+│   ├── invoice.py         # PDF invoice generation (NEW)
+│   ├── email_utils.py     # Email sending utilities (NEW)
 │   ├── admin.py           # Admin configuration
-│   └── urls.py            # Shop URLs
+│   ├── urls.py            # Shop URLs
+│   └── management/
+│       └── commands/
+│           ├── populate_sample_data.py
+│           └── test_invoice.py  # Invoice testing tool (NEW)
 ├── home/                   # Wagtail home app
 │   └── models.py          # HomePage model
 ├── templates/              # HTML templates
 │   ├── base.html          # Base template
 │   ├── home/              # Home templates
 │   └── shop/              # Shop templates
+│       ├── emails/        # Email templates (NEW)
+│       │   ├── order_confirmation.html
+│       │   ├── order_confirmation.txt
+│       │   ├── order_status_update.html
+│       │   └── order_status_update.txt
+│       ├── product_detail.html
+│       ├── product_list.html
+│       ├── cart_detail.html
+│       ├── checkout.html
+│       └── payment.html
 ├── static/                 # Static files (CSS, JS, images)
 ├── media/                  # User-uploaded files
 ├── staticfiles/            # Collected static files
 ├── nginx/                  # Nginx configuration
+├── setup_pages.py         # Page structure creation (NEW)
 ├── requirements.txt        # Python dependencies
+├── setup.bat              # Windows setup script
 ├── Dockerfile             # Docker configuration
 ├── docker-compose.yml     # Docker Compose setup
-├── .env.example           # Environment variables template
+├── .env                   # Environment variables
+├── .env.example           # Environment template
+├── PAYMENT_SETUP.md       # Payment integration guide (NEW)
+├── INTEGRATION_COMPLETE.md # Quick reference (NEW)
+├── PYTHON_VERSION_ISSUE.md # Python compatibility notes (NEW)
 └── README.md              # This file
 ```
 
@@ -381,20 +463,44 @@ luvora/
 
 ## 🔌 API & Integrations
 
-### Razorpay Integration
+### Razorpay Payment Integration
 
-The platform uses Razorpay for payment processing:
+The platform uses Razorpay for secure payment processing:
 
-1. **Order Creation**: When checkout is completed, a Razorpay order is created
-2. **Payment Popup**: User completes payment in Razorpay modal
-3. **Verification**: Payment signature is verified server-side
-4. **Confirmation**: Order status is updated, stock reduced, email sent
+1. **Test Mode** (No API keys): 
+   - Checkout works, payment page shows test mode message
+   - Perfect for development and testing
 
-### Webhook Handling
+2. **Production Mode** (With API keys):
+   - Order creation: Razorpay order created on checkout
+   - Payment popup: User completes payment in Razorpay modal
+   - Verification: Payment signature verified server-side
+   - Confirmation: Order marked paid, stock reduced, email sent
 
-Add webhook endpoint in Razorpay dashboard:
-- URL: `https://yourdomain.com/shop/payment/callback/`
-- Secret: Set in `.env` as `RAZORPAY_WEBHOOK_SECRET`
+### Invoice Generation
+
+Automated PDF invoice generation with:
+- Professional branding and styling
+- Complete order details and customer info
+- Itemized product list with SKU codes
+- Price breakdown (subtotal, discount, shipping, tax, total)
+- Payment information
+- Attached to confirmation emails
+
+### Email Notifications
+
+Automated emails sent on:
+- **Order Confirmation**: Sent when payment succeeds
+  - Includes full order details
+  - PDF invoice attached
+  - Beautiful HTML template
+- **Order Status Updates**: Sent when admin changes order status
+  - Status change notification
+  - Optional custom message
+
+Email backends:
+- **Development**: Console (emails printed to terminal)
+- **Production**: SMTP (Gmail, SendGrid, etc.)
 
 ---
 
@@ -402,59 +508,84 @@ Add webhook endpoint in Razorpay dashboard:
 
 ### Common Issues
 
-**1. cx_Oracle Import Error**
+**1. Python 3.14 Compatibility**
 ```bash
-# Install Oracle Instant Client
-# Add to PATH/LD_LIBRARY_PATH
-# Reinstall cx_Oracle
-pip uninstall cx_Oracle
-pip install cx_Oracle
+# Django/Wagtail not yet compatible with Python 3.14
+# Use Python 3.12 or 3.13
+# See PYTHON_VERSION_ISSUE.md for details
 ```
 
-**2. Static Files Not Loading**
+**2. ModuleNotFoundError: No module named 'django'**
+```bash
+# Virtual environment not activated
+.venv\Scripts\activate  # Windows
+source .venv/bin/activate  # Linux/Mac
+```
+
+**3. Static Files Not Loading**
 ```bash
 python manage.py collectstatic --clear
 python manage.py collectstatic
 ```
 
-**3. Migration Issues**
+**4. Migration Issues**
 ```bash
 python manage.py makemigrations
 python manage.py migrate --run-syncdb
 ```
 
-**4. Razorpay Payment Fails**
-- Check API keys in `.env`
-- Verify webhook signature
-- Check logs: `docker-compose logs web`
+**5. Payment Test Mode Issues**
+- Razorpay keys not needed for test mode
+- Test mode shows on payment page automatically
+- Check logs in terminal for details
 
-**5. Docker Port Already in Use**
-```powershell
-# Windows
-netstat -ano | findstr :8000
-taskkill /PID <PID> /F
+**6. Invoice Generation Fails**
+```bash
+# Install PDF libraries
+pip install reportlab weasyprint
+```
 
-# Or change port in docker-compose.yml
+**7. Email Not Sending**
+```bash
+# Check terminal for console backend output
+# For production, verify SMTP settings in .env
+# Test with: python manage.py test_invoice ORDER_ID --email
+```
+
+**8. No Products Showing**
+```bash
+# Run page setup script
+python setup_pages.py
+
+# Or create pages manually in Wagtail admin
 ```
 
 ---
 
 ## 📞 Support & Contributing
 
-- **Issues**: Open an issue on GitHub
-- **Documentation**: See `/docs` folder
-- **Contributing**: Pull requests welcome!
+- **Issues**: Open an issue on [GitHub](https://github.com/himanshuaggarwal31/luvora/issues)
+- **Documentation**: 
+  - [PAYMENT_SETUP.md](PAYMENT_SETUP.md) - Payment integration guide
+  - [INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md) - Feature overview
+  - [PYTHON_VERSION_ISSUE.md](PYTHON_VERSION_ISSUE.md) - Python compatibility
+  - [GETTING_STARTED.md](GETTING_STARTED.md) - Detailed setup guide
+- **Contributing**: Pull requests welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
 ## 🎯 Roadmap
 
+- [x] Razorpay payment integration
+- [x] PDF invoice generation
+- [x] Email notifications with attachments
+- [x] Automated order processing
 - [ ] Email marketing integration
 - [ ] Product reviews & ratings
 - [ ] Wishlist functionality
@@ -462,20 +593,22 @@ This project is licensed under the MIT License.
 - [ ] Advanced analytics dashboard
 - [ ] Mobile app (React Native)
 - [ ] Inventory alerts
-- [ ] Bulk product import
+- [ ] Bulk product import/export
 
 ---
 
 ## 👥 Credits
 
-Built with ❤️ for LUVORA by Himanshu
+Built with ❤️ by Himanshu Aggarwal
 
 **Tech Stack:**
-- Django 4.2
-- Wagtail CMS 5.2
+- Django 5.1.15
+- Wagtail CMS 6.4.2
+- Python 3.12
 - Bootstrap 5
 - Razorpay
-- PostgreSQL/Oracle
+- ReportLab (PDF generation)
+- SQLite/PostgreSQL/Oracle
 - Docker & Nginx
 
 ---

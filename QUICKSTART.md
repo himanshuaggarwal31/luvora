@@ -1,14 +1,51 @@
 # LUVORA Quick Setup Guide
 
-## 🚀 5-Minute Quick Start
+## 🚀 3-Minute Quick Start (Windows)
 
-### Step 1: Setup Environment
+### Automated Setup (Recommended)
 
 ```powershell
-# Navigate to project
-cd c:\Himanshu\REPOS\luvora
+# Clone repository
+git clone https://github.com/himanshuaggarwal31/luvora.git
+cd luvora
 
-# Create virtual environment
+# Run setup script
+.\setup.bat
+
+# The script automatically:
+# - Creates Python 3.12 virtual environment
+# - Installs all dependencies (Django 5.1, Wagtail 6.4, ReportLab, etc.)
+# - Configures SQLite database
+# - Runs migrations
+# - Creates static directory
+# - Prompts for superuser creation
+```
+
+After setup completes:
+
+```powershell
+# Activate environment
+.venv\Scripts\activate
+
+# Create page structure (Home, Shop, Products)
+python setup_pages.py
+
+# Start server
+python manage.py runserver
+```
+
+**Visit**: http://127.0.0.1:8000
+
+**Admin**: http://127.0.0.1:8000/admin/ (use superuser credentials)
+
+---
+
+## 📝 Manual Setup (If Needed)
+
+### Step 1: Environment Setup
+
+```powershell
+# Create virtual environment (Python 3.12 required)
 python -m venv .venv
 .venv\Scripts\activate
 
@@ -16,35 +53,17 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### Step 2: Configure Database
+### Step 2: Database Configuration
 
-**Option A: SQLite (Easiest - for testing)**
-```powershell
-# Copy .env file
-copy .env.example .env
-
-# Edit .env - Use SQLite (default)
-# DB_ENGINE=django.db.backends.sqlite3
-# DB_NAME=db.sqlite3
+**SQLite (Default - No configuration needed!)**
+```env
+DB_ENGINE=django.db.backends.sqlite3
+DB_NAME=db.sqlite3
 ```
 
-**Option B: PostgreSQL (Recommended)**
-```powershell
-# Install PostgreSQL from https://www.postgresql.org/download/
+The `.env` file is already configured for SQLite.
 
-# Create database
-psql -U postgres
-CREATE DATABASE luvora_db;
-\q
-
-# Update .env
-# DB_ENGINE=django.db.backends.postgresql
-# DB_NAME=luvora_db
-# DB_USER=postgres
-# DB_PASSWORD=your_password
-```
-
-### Step 3: Initialize Database
+### Step 3: Initialize Database & Pages
 
 ```powershell
 # Run migrations
@@ -52,139 +71,139 @@ python manage.py migrate
 
 # Create superuser
 python manage.py createsuperuser
-# Enter username, email, password when prompted
 
-# Create logs directory
-mkdir logs
+# Create page structure (Home, Shop, Sample Products)
+python setup_pages.py
 ```
+
+The `setup_pages.py` script creates:
+- ✅ Home page (site root)
+- ✅ Shop page (`/shop/`)
+- ✅ 2 sample products with pricing
 
 ### Step 4: Run Development Server
 
 ```powershell
-# Start server
 python manage.py runserver
-
-# Open browser: http://localhost:8000
 ```
+
+**Visit**: http://127.0.0.1:8000
 
 ---
 
-## 📝 Initial Setup
+## 📝 What You Get Out of the Box
 
-### Create Home Page (Wagtail)
+### ✅ Pre-configured Features
+- **SQLite Database**: Ready to use, no setup needed
+- **Sample Products**: 2 products with images and pricing
+- **Shopping Cart**: Session-based cart system
+- **Payment Integration**: Razorpay (works in test mode without keys)
+- **Invoice Generation**: Professional PDF invoices with ReportLab
+- **Email Notifications**: Console backend (prints to terminal)
+- **Admin Panel**: Wagtail CMS + Django Admin
+- **Bootstrap 5 UI**: Responsive, mobile-first design
 
-1. Visit: http://localhost:8000/admin/
+---
+
+## 🛍️ Adding More Products
+
+### Via Wagtail CMS (Recommended)
+
+1. Visit: http://127.0.0.1:8000/admin/
 2. Login with superuser credentials
-3. Click "Pages" → "Welcome to your new Wagtail site!"
-4. Click "..." → "Delete"
-5. Click "Pages" → "Home" → "Add child page" → "Home Page"
-6. Fill in hero section and save
-7. Set as homepage if prompted
+3. Pages → Shop → Add child page → Product
+4. Fill in product details:
+   - **Title**: Product name
+   - **SKU**: Unique code (e.g., "BED-001")
+   - **Price**: Selling price
+   - **Compare Price**: Original price (for discount display)
+   - **Short Description**: Brief product summary
+   - **Description**: Detailed product information (rich text)
+   - **Main Image**: Upload product image
+   - **Category**: Select or create category
+   - **Stock Quantity**: Available units
+   - **Is Available**: ✓ (make product visible)
+   - **Is Featured**: ✓ (optional, for featured products)
+5. Save and publish
 
-### Create Product Index
+### Managing Products
 
-1. In Wagtail admin: Pages → Home → Add child page → Product Index Page
-2. Title: "Shop" or "Products"
-3. Save and publish
-
-### Add First Product
-
-1. Pages → Shop → Add child page → Product
-2. Fill in:
-   - Title: Your product name
-   - SKU: Unique code (e.g., "PROD001")
-   - Price: Product price
-   - Category: Create one first (see below)
-   - Stock quantity: Available units
-   - Short description
-   - Full description
-   - Upload image
-3. Check "Is available" and "Live" checkbox
-4. Save and publish
-
-### Create Categories
-
-```powershell
-python manage.py shell
-```
-
-```python
-from shop.models import Category
-
-# Create categories
-electronics = Category.objects.create(
-    name="Electronics",
-    description="Electronic devices and accessories"
-)
-
-fashion = Category.objects.create(
-    name="Fashion",
-    description="Clothing and accessories"
-)
-
-print("Categories created!")
-exit()
-```
-
-### Create Test Coupon
-
-1. Visit: http://localhost:8000/django-admin/
-2. Shop → Coupons → Add Coupon
-3. Fill in:
-   - Code: WELCOME10
-   - Discount type: Percentage
-   - Value: 10
-   - Valid from: Today's date
-   - Valid to: Future date
-   - Active: ✓
-4. Save
+- **Edit**: Pages → Shop → Click product → Edit
+- **Delete**: Pages → Shop → Click product → Delete
+- **Unpublish**: Uncheck "Live" to hide without deleting
+- **Reorder**: Drag and drop in page list
 
 ---
 
-## 🧪 Test the Application
+## 🧪 Testing Features
 
-### Test Products
-1. Visit: http://localhost:8000/shop/
+### Test the Shop
+1. Visit: http://127.0.0.1:8000/shop/
 2. Browse products
 3. Click on a product to view details
+4. Product shows: price, stock status, description, image
 
 ### Test Shopping Cart
 1. Add product to cart
-2. Update quantity
-3. Apply coupon code: WELCOME10
-4. Proceed to checkout
+2. Visit cart: http://127.0.0.1:8000/shop/cart/
+3. Update quantities
+4. See real-time price calculations
 
-### Test Checkout (Without Payment)
+### Test Checkout Flow
 1. Fill in shipping information
-2. Submit form
-3. You'll see payment page (Razorpay test mode if not configured)
+2. Review order summary
+3. Click "Proceed to Payment"
+4. **Test Mode** (no Razorpay keys):
+   - Payment page shows test mode message
+   - Order created but not paid
+5. **Production Mode** (with keys):
+   - Razorpay payment modal opens
+   - Complete payment with test card
+
+### Test Payment & Invoices
+After placing an order:
+
+```powershell
+# View orders in Django admin
+# Visit: http://127.0.0.1:8000/django-admin/shop/order/
+
+# Test invoice generation
+python manage.py test_invoice ORDER_ID_HERE --save
+
+# Test email with invoice (check terminal for output)
+python manage.py test_invoice ORDER_ID_HERE --email
+```
 
 ---
 
-## 💳 Configure Razorpay (Optional)
+## 💳 Payment Integration (Optional)
 
-### Get Razorpay Test Keys
+### Test Mode (Default - No Setup Needed)
+- Checkout works without Razorpay API keys
+- Payment page shows test mode message
+- Perfect for development and testing
+- No actual payment processing
 
-1. Sign up at: https://razorpay.com
-2. Go to Dashboard → Settings → API Keys
-3. Click "Generate Test Key"
-4. Copy Key ID and Key Secret
+### Production Mode (With Razorpay)
 
-### Update .env
+1. **Sign up**: https://razorpay.com
+2. **Get Keys**: Dashboard → Settings → API Keys → Generate Test Key
+3. **Update .env**:
+   ```env
+   RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxx
+   RAZORPAY_KEY_SECRET=your_secret_key_here
+   ```
+4. **Restart server**: `python manage.py runserver`
 
-```env
-RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxx
-RAZORPAY_KEY_SECRET=your_secret_key_here
-```
+### Test Payment (With Keys)
+Use Razorpay test credentials:
+- **Card**: 4111 1111 1111 1111
+- **CVV**: Any 3 digits
+- **Expiry**: Any future date
+- **OTP**: 123456
+- **UPI**: success@razorpay
 
-### Test Payment
-
-1. Restart server: `python manage.py runserver`
-2. Go through checkout process
-3. Use Razorpay test cards:
-   - Card: 4111 1111 1111 1111
-   - CVV: Any 3 digits
-   - Expiry: Any future date
+See [PAYMENT_SETUP.md](PAYMENT_SETUP.md) for detailed payment guide.
 
 ---
 

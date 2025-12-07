@@ -6,72 +6,96 @@ Congratulations! You now have a **complete, production-ready e-commerce platform
 
 ✅ Product management via Wagtail CMS  
 ✅ Shopping cart & checkout system  
-✅ Razorpay payment integration  
-✅ Coupon system  
-✅ Order management  
-✅ Inventory tracking  
-✅ Responsive Bootstrap UI  
+✅ Razorpay payment integration (test mode ready)
+✅ **Professional PDF invoice generation**
+✅ **Automated email notifications with attachments**
+✅ Coupon system with validation
+✅ Order management & tracking 
+✅ Real-time inventory tracking
+✅ Responsive Bootstrap 5 UI  
 ✅ Docker deployment ready  
-✅ Oracle/PostgreSQL support  
+✅ SQLite/PostgreSQL/Oracle support
 
 ---
 
-## 🚀 Getting Started (5 Minutes)
+## 🚀 Getting Started (3 Minutes - Windows)
 
-### Step 1: Install Dependencies
+### Automated Setup (Recommended)
+
 ```powershell
-# Run the setup script
+# Clone repository
+git clone https://github.com/himanshuaggarwal31/luvora.git
+cd luvora
+
+# Run setup script (installs everything automatically)
 .\setup.bat
 
-# OR manually:
-python -m venv .venv
+# After setup completes:
 .venv\Scripts\activate
-pip install -r requirements.txt
-copy .env.example .env
+python setup_pages.py
+python manage.py runserver
 ```
 
-### Step 2: Configure Database
-Edit `.env` file - Choose one:
+🎉 **Done!** Open http://127.0.0.1:8000
 
-**Option A: SQLite (Quickest)**
+---
+
+## 📝 Manual Setup (Alternative)
+
+### Step 1: Python Environment
+
+**Important**: Use Python 3.12 (Python 3.14 not yet supported by Django/Wagtail)
+
+```powershell
+# Check Python version
+python --version  # Should show 3.12.x
+
+# Create virtual environment
+python -m venv .venv
+.venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Step 2: Database Configuration
+
+**SQLite (Default - No setup needed!)**  
+The `.env` file is already configured for SQLite:
 ```env
-DEBUG=True
-SECRET_KEY=your-secret-key-change-in-production
 DB_ENGINE=django.db.backends.sqlite3
 DB_NAME=db.sqlite3
 ```
 
-**Option B: PostgreSQL (Recommended)**
-```env
-DEBUG=True
-SECRET_KEY=your-secret-key-change-in-production
-DB_ENGINE=django.db.backends.postgresql
-DB_NAME=luvora_db
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
-```
-
-### Step 3: Initialize Database
+### Step 3: Initialize Application
 ```powershell
-# Create database tables
+# Run migrations
 python manage.py migrate
 
-# Create admin user
+# Create superuser (admin account)
 python manage.py createsuperuser
 # Enter: username, email, password
 
-# Load sample products & coupons
-python manage.py populate_sample_data
+# Create page structure and sample products
+python setup_pages.py
 ```
 
-### Step 4: Run Server
+The `setup_pages.py` script creates:
+- Home page (site root)
+- Shop page (`/shop/`)
+- 2 sample products with images
+
+### Step 4: Start Server
 ```powershell
 python manage.py runserver
 ```
 
-🎉 **Done!** Open http://localhost:8000
+🎉 **Application ready!**
+
+**Visit:**
+- **Shop**: http://127.0.0.1:8000/shop/
+- **Admin**: http://127.0.0.1:8000/admin/
+- **Django Admin**: http://127.0.0.1:8000/django-admin/
 
 ---
 
@@ -79,25 +103,28 @@ python manage.py runserver
 
 ### 1. Access Admin Panels
 
-**Wagtail CMS** (Manage Products & Pages)  
-→ http://localhost:8000/admin/  
-→ Login with superuser credentials  
-→ Go to Pages → Shop → Add Product
+**Wagtail CMS** (Content & Products)  
+→ http://127.0.0.1:8000/admin/  
+→ Manage pages, products, images  
+→ Pages → Shop → Add child page → Product
 
-**Django Admin** (Manage Orders & Coupons)  
-→ http://localhost:8000/django-admin/  
+**Django Admin** (Orders & Settings)  
+→ http://127.0.0.1:8000/django-admin/  
 → View orders, create coupons, manage categories
 
-### 2. Browse Shop
-→ http://localhost:8000/shop/  
-→ See sample products  
-→ Add to cart  
-→ Try coupon code: **WELCOME10**
+### 2. Browse the Shop
+→ http://127.0.0.1:8000/shop/  
+→ View sample products  
+→ Clean URLs: `/shop/product-name/`  
+→ Responsive design for all devices
 
-### 3. Test Checkout
-1. Add products to cart
-2. Apply coupon: **WELCOME10** (10% off)
-3. Go to checkout
+### 3. Test the Complete Flow
+1. **Add products** to cart
+2. **View cart**: http://127.0.0.1:8000/shop/cart/
+3. **Go to checkout**: http://127.0.0.1:8000/shop/checkout/
+4. **Fill shipping details**
+5. **Payment page**: Works in test mode (no API keys needed)
+6. **Check terminal**: Email with invoice appears in console
 4. Fill shipping info
 5. Payment page (test mode if Razorpay not configured)
 
