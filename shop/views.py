@@ -1,6 +1,7 @@
 """
 Views for shop app
 """
+import time
 from decimal import Decimal
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
@@ -261,8 +262,53 @@ def payment(request, order_id):
         context = {
             'order': order,
             'test_mode': True,
+            'test_payment_url': request.build_absolute_uri(
+                reverse('shop:test_payment', kwargs={'order_id': order.order_id})
+            ),
         }
         return render(request, 'shop/payment.html', context)
+
+
+def test_payment(request, order_id):
+    """
+    Test mode payment - bypasses Razorpay for development
+    Only works when DEBUG=True and Razorpay keys are not configured
+    """
+    if not settings.DEBUG or (settings.RAZORPAY_KEY_ID and settings.RAZORPAY_KEY_SECRET):
+        messages.error(request, "Test payment is only available in development mode.")
+        return redirect('shop:product_list')
+    
+    order = get_object_or_404(Order, order_id=order_id)
+    
+    # Check if order belongs to current session
+    if request.session.get('order_id') != order.id:
+        messages.error(request, "Invalid order access.")
+        return redirect('shop:product_list')
+    
+    if request.method == 'POST':
+        # Simulate successful payment
+        test_payment_id = f"test_pay_{order.order_id}_{int(time.time())}"
+        test_signature = f"test_sig_{order.order_id}"
+        
+        # Mark order as paid (this triggers email and invoice generation)
+        order.mark_as_paid(test_payment_id, test_signature)
+        
+        # Clear cart
+        cart = Cart(request)
+        cart.clear()
+        
+        # Clear order from session
+        if 'order_id' in request.session:
+            del request.session['order_id']
+        
+        messages.success(request, "✅ TEST PAYMENT: Your order has been placed successfully!")
+        return redirect('shop:order_success', order_id=order.order_id)
+    
+    # Show test payment confirmation page
+    context = {
+        'order': order,
+    }
+    return render(request, 'shop/test_payment.html', context)
 
 
 @csrf_exempt

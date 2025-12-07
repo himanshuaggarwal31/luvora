@@ -34,13 +34,24 @@
                     
                     {% if test_mode %}
                     <!-- Test Mode -->
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle"></i> 
-                        <strong>Test Mode:</strong> Razorpay is not configured. 
-                        Configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in your .env file.
+                    <div class="alert alert-warning border-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle-fill"></i> Development Mode
+                        </h6>
+                        <p class="mb-2">
+                            Razorpay is not configured. You can use test payment to simulate the complete order workflow.
+                        </p>
+                        <small class="text-muted">
+                            To enable real payments, configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in your .env file.
+                        </small>
                     </div>
-                    <a href="{% url 'shop:product_list' %}" class="btn btn-primary w-100">
-                        Return to Shop
+                    
+                    <a href="{{ test_payment_url }}" class="btn btn-success btn-lg w-100 mb-3">
+                        <i class="bi bi-play-circle"></i> Use Test Payment (Dev Mode)
+                    </a>
+                    
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-left"></i> Return to Shop
                     </a>
                     {% else %}
                     <!-- Razorpay Payment Button -->
