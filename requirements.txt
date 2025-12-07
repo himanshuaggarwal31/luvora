@@ -13,6 +13,10 @@ whitenoise>=6.6.0  # Static file serving
 # Payment gateway
 razorpay>=1.4.1
 
+# PDF Generation
+reportlab>=4.0.0
+weasyprint>=60.0  # Alternative PDF generation
+
 # Image handling
 Pillow>=10.0.0,<12.0.0  # Compatible with Wagtail 6.x and Python 3.14
 

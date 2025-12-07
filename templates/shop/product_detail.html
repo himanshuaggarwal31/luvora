@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
-{% block title %}{{ product.title }} | LUVORA{% endblock %}
+{% block title %}{{ page.title }} | LUVORA{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -9,10 +9,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'shop:product_list' %}">Shop</a></li>
-            {% if product.category %}
-            <li class="breadcrumb-item"><a href="{% url 'shop:category_detail' slug=product.category.slug %}">{{ product.category.name }}</a></li>
+            {% if page.category %}
+            <li class="breadcrumb-item"><a href="{% url 'shop:category_detail' slug=page.category.slug %}">{{ page.category.name }}</a></li>
             {% endif %}
-            <li class="breadcrumb-item active">{{ product.title }}</li>
+            <li class="breadcrumb-item active">{{ page.title }}</li>
         </ol>
     </nav>
     
@@ -20,55 +20,55 @@
         <!-- Product Image -->
         <div class="col-lg-6 mb-4">
             <div class="card border-0 shadow-sm">
-                {% if product.main_image %}
-                    {% image product.main_image original as product_img %}
-                    <img src="{{ product_img.url }}" class="card-img-top" alt="{{ product.title }}">
+                {% if page.main_image %}
+                    {% image page.main_image original as product_img %}
+                    <img src="{{ product_img.url }}" class="card-img-top" alt="{{ page.title }}">
                 {% else %}
-                    <img src="https://via.placeholder.com/600x600?text={{ product.title }}" 
-                         class="card-img-top" alt="{{ product.title }}">
+                    <img src="https://via.placeholder.com/600x600?text={{ page.title }}" 
+                         class="card-img-top" alt="{{ page.title }}">
                 {% endif %}
             </div>
         </div>
         
         <!-- Product Details -->
         <div class="col-lg-6">
-            <h1 class="fw-bold mb-3">{{ product.title }}</h1>
+            <h1 class="fw-bold mb-3">{{ page.title }}</h1>
             
-            {% if product.category %}
+            {% if page.category %}
             <p class="text-muted mb-3">
                 <i class="bi bi-tag"></i> 
-                <a href="{% url 'shop:category_detail' slug=product.category.slug %}" class="text-decoration-none">
-                    {{ product.category.name }}
+                <a href="{% url 'shop:category_detail' slug=page.category.slug %}" class="text-decoration-none">
+                    {{ page.category.name }}
                 </a>
             </p>
             {% endif %}
             
             <div class="mb-4">
                 <div class="d-flex align-items-center mb-2">
-                    <h2 class="text-primary mb-0">₹{{ product.price }}</h2>
-                    {% if product.compare_price %}
-                    <span class="text-muted text-decoration-line-through ms-3 h4">₹{{ product.compare_price }}</span>
-                    {% if product.discount_percentage %}
-                    <span class="badge bg-danger ms-2">{{ product.discount_percentage }}% OFF</span>
+                    <h2 class="text-primary mb-0">₹{{ page.price }}</h2>
+                    {% if page.compare_price %}
+                    <span class="text-muted text-decoration-line-through ms-3 h4">₹{{ page.compare_price }}</span>
+                    {% if page.discount_percentage %}
+                    <span class="badge bg-danger ms-2">{{ page.discount_percentage }}% OFF</span>
                     {% endif %}
                     {% endif %}
                 </div>
-                <p class="text-muted small">SKU: {{ product.sku }}</p>
+                <p class="text-muted small">SKU: {{ page.sku }}</p>
             </div>
             
-            {% if product.short_description %}
-            <p class="lead">{{ product.short_description }}</p>
+            {% if page.short_description %}
+            <p class="lead">{{ page.short_description }}</p>
             {% endif %}
             
             <!-- Stock Status -->
             <div class="mb-4">
-                {% if product.is_in_stock %}
+                {% if page.is_in_stock %}
                     <span class="badge bg-success">
                         <i class="bi bi-check-circle"></i> In Stock
                     </span>
-                    {% if product.track_inventory and product.stock_quantity < 10 %}
+                    {% if page.track_inventory and page.stock_quantity < 10 %}
                     <span class="text-warning small ms-2">
-                        Only {{ product.stock_quantity }} left!
+                        Only {{ page.stock_quantity }} left!
                     </span>
                     {% endif %}
                 {% else %}
@@ -79,8 +79,8 @@
             </div>
             
             <!-- Add to Cart Form -->
-            {% if product.is_in_stock %}
-            <form action="{% url 'shop:cart_add' product.id %}" method="post" class="mb-4">
+            {% if page.is_in_stock %}
+            <form action="{% url 'shop:cart_add' page.id %}" method="post" class="mb-4">
                 {% csrf_token %}
                 <div class="row g-3">
                     <div class="col-auto">
@@ -101,10 +101,10 @@
             {% endif %}
             
             <!-- Product Description -->
-            {% if product.description %}
+            {% if page.description %}
             <div class="mt-5">
                 <h4 class="fw-bold mb-3">Product Description</h4>
-                <div class="text-muted">{{ product.description|richtext }}</div>
+                <div class="text-muted">{{ page.description|richtext }}</div>
             </div>
             {% endif %}
         </div>

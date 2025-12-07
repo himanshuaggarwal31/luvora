@@ -91,7 +91,7 @@ class Cart:
         
         for item in cart.values():
             item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
+            item['total_price'] = float(item['price'] * item['quantity'])  # Convert to float for JSON
             yield item
     
     def __len__(self):

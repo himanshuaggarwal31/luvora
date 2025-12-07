@@ -1,0 +1,23 @@
+Order Status Update - {{ order_id }} | LUVORA
+============================================================
+
+Dear {{ customer_name }},
+
+Your order {{ order_id }} has been updated!
+
+CURRENT STATUS: {{ status }}
+
+{% if message %}
+{{ message }}
+{% endif %}
+
+Order Date: {{ order.created_at|date:"F d, Y" }}
+Order Total: ₹{{ order.total }}
+
+For any questions, please contact us at:
+Email: info@luvora.com
+Phone: +91 XXXXXXXXXX
+Website: {{ site_url }}
+
+Best regards,
+The LUVORA Team

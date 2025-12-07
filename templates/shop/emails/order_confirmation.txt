@@ -1,0 +1,47 @@
+Order Confirmation - {{ order_id }} | LUVORA
+============================================================
+
+Dear {{ customer_name }},
+
+Thank you for your order!
+
+ORDER DETAILS
+-------------
+Order ID: {{ order_id }}
+Order Date: {{ order.created_at|date:"F d, Y" }}
+Payment Status: {{ order.get_status_display }}
+{% if order.razorpay_payment_id %}Payment ID: {{ order.razorpay_payment_id }}{% endif %}
+
+SHIPPING ADDRESS
+----------------
+{{ order.shipping_address_line1 }}
+{% if order.shipping_address_line2 %}{{ order.shipping_address_line2 }}{% endif %}
+{{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_pincode }}
+{{ order.shipping_country }}
+
+ITEMS ORDERED
+-------------
+{% for item in order.items.all %}
+{{ item.product_name }} (SKU: {{ item.product_sku }})
+Quantity: {{ item.quantity }} × ₹{{ item.product_price }} = ₹{{ item.get_total_price }}
+{% endfor %}
+
+ORDER SUMMARY
+-------------
+Subtotal: ₹{{ order.subtotal }}
+{% if order.discount_amount > 0 %}Discount{% if order.coupon_code %} ({{ order.coupon_code }}){% endif %}: -₹{{ order.discount_amount }}{% endif %}
+{% if order.shipping_cost > 0 %}Shipping: ₹{{ order.shipping_cost }}{% endif %}
+{% if order.tax_amount > 0 %}Tax: ₹{{ order.tax_amount }}{% endif %}
+TOTAL PAID: ₹{{ order.total }}
+
+Your invoice is attached to this email as a PDF.
+
+We'll send you another email when your order ships!
+
+For any questions, please contact us at:
+Email: info@luvora.com
+Phone: +91 XXXXXXXXXX
+Website: {{ site_url }}
+
+Best regards,
+The LUVORA Team

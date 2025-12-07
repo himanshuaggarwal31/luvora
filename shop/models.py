@@ -207,6 +207,13 @@ class ProductPage(Page):
         if self.track_inventory:
             self.stock_quantity = max(0, self.stock_quantity - quantity)
             self.save(update_fields=['stock_quantity'])
+    
+    def get_context(self, request):
+        """Add cart form to context"""
+        from .forms import CartAddProductForm
+        context = super().get_context(request)
+        context['cart_product_form'] = CartAddProductForm()
+        return context
 
 
 class ProductIndexPage(Page):
@@ -416,7 +423,7 @@ class Order(models.Model):
         return f"LUV{timestamp}{random_str}"
     
     def mark_as_paid(self, payment_id, signature):
-        """Mark order as paid"""
+        """Mark order as paid and send confirmation email"""
         self.status = 'paid'
         self.razorpay_payment_id = payment_id
         self.razorpay_signature = signature
@@ -431,6 +438,10 @@ class Order(models.Model):
         for item in self.items.all():
             if item.product:
                 item.product.reduce_stock(item.quantity)
+        
+        # Send order confirmation email with invoice
+        from .email_utils import send_order_confirmation_email
+        send_order_confirmation_email(self)
 
 
 class OrderItem(models.Model):
