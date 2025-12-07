@@ -1,7 +1,7 @@
 """
 Email utilities for sending order confirmations and invoices
 """
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from .invoice import generate_invoice_pdf
@@ -33,7 +33,7 @@ def send_order_confirmation_email(order):
         text_message = render_to_string('shop/emails/order_confirmation.txt', context)
         
         # Create email
-        email = EmailMessage(
+        email = EmailMultiAlternatives(
             subject=subject,
             body=text_message,
             from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@luvora.com',
@@ -79,7 +79,7 @@ def send_order_status_update_email(order, message=''):
         html_message = render_to_string('shop/emails/order_status_update.html', context)
         text_message = render_to_string('shop/emails/order_status_update.txt', context)
         
-        email = EmailMessage(
+        email = EmailMultiAlternatives(
             subject=subject,
             body=text_message,
             from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@luvora.com',
