@@ -68,10 +68,11 @@ class Cart:
     
     def get_total_price(self):
         """Calculate total price of all items in cart"""
-        return sum(
+        total = sum(
             Decimal(item['price']) * item['quantity']
             for item in self.cart.values()
         )
+        return float(total)  # Convert to float for JSON serialization
     
     def get_total_quantity(self):
         """Get total number of items in cart"""
@@ -90,6 +91,7 @@ class Cart:
             cart[str(product.id)]['product'] = product
         
         for item in cart.values():
+            # Keep price as string in session, convert to Decimal for calculations
             item['price'] = Decimal(item['price'])
             item['total_price'] = float(item['price'] * item['quantity'])  # Convert to float for JSON
             yield item
@@ -121,15 +123,16 @@ class Cart:
     def get_discount(self):
         """Get discount amount from coupon"""
         if self.coupon:
-            total = self.get_total_price()
+            total = Decimal(str(self.get_total_price()))
             is_valid, message = self.coupon.is_valid(total)
             if is_valid:
-                return self.coupon.calculate_discount(total)
-        return Decimal('0.00')
+                discount = self.coupon.calculate_discount(total)
+                return float(discount)  # Convert to float for JSON serialization
+        return 0.00  # Return float instead of Decimal
     
     def get_total_price_after_discount(self):
         """Get total price after applying discount"""
-        return self.get_total_price() - self.get_discount()
+        return self.get_total_price() - self.get_discount()  # Both are floats now
     
     def apply_coupon(self, coupon_code):
         """
@@ -143,7 +146,7 @@ class Cart:
         except Coupon.DoesNotExist:
             return False, "Invalid coupon code", None
         
-        total = self.get_total_price()
+        total = Decimal(str(self.get_total_price()))
         is_valid, message = coupon.is_valid(total)
         
         if is_valid:
