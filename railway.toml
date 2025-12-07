@@ -1,0 +1,10 @@
+# Railway.app configuration
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "gunicorn luvora_project.wsgi:application"
+healthcheckPath = "/admin/"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

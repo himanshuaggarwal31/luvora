@@ -21,6 +21,7 @@ wheels/
 .installed.cfg
 *.egg
 .env
+ngrok.exe
 
 # Virtual Environment
 .venv/
@@ -44,6 +45,9 @@ db.sqlite3-journal
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
+.env.test
 
 # IDEs
 .vscode/

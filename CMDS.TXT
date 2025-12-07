@@ -1,1 +1,18 @@
 .venv\Scripts\activate.ps1; python manage.py runserver
+
+
+
+ngrok
+
+.\ngrok config add-authtoken 36W4lcxcPeeV4liYsQ17icoGA98_56U2etkUoUWRKykF5aMiS
+
+# Download from https://ngrok.com, then run:
+.\ngrok http 8000
+
+GiPIqOTgLo8A0DqXwbt7Haa1TOABl5ijy2tnUyeCR1k
+
+----------------
+
+https://unalleviated-vicente-clownishly.ngrok-free.dev/admin/
+
+https://unalleviated-vicente-clownishly.ngrok-free.dev/django-admin/

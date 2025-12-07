@@ -1,0 +1,33 @@
+Future Requirements
+
+
+A. Email Notifications:
+
+Order confirmation emails (code exists but not triggered) - Done
+Payment success emails - Not needed as of now
+Order status update emails - Not needed as of now
+B. Order Processing Workflow:
+Status progression: Paid → Processing → Shipped → Delivered -  Not needed as of now
+Shipping tracking integration - Not needed as of now
+Admin bulk actions - Not needed as of now
+C. Customer Features:
+Customer order history dashboard - Not needed as of now
+Order tracking page - Not needed as of now
+Invoice download - Not needed as of now
+D. Production Readiness:
+Security headers configuration
+Rate limiting on webhook endpoint
+Logging/monitoring setup
+🎯 What Would You Like to Add?
+Since your core payment and webhook system is working perfectly, would you like me to implement any of these:
+
+Email notifications - Send order confirmations when webhooks arrive?
+Order status workflow - Add processing/shipped/delivered statuses with tracking?
+Customer dashboard - Let customers view their order history?
+Admin enhancements - Add bulk actions for order processing?
+Your system is production-ready for accepting payments! These are just nice-to-have features. What's most important to you?
+
+
+
+all good, now help me with how can i deploy it to test env as prod like env for user testings, 
+everything would be production like for deployment pespective for now.
