@@ -196,7 +196,7 @@ def checkout(request):
                     product=item['product'],
                     product_sku=item['sku'],
                     product_name=item['title'],
-                    product_price=item['price'],
+                    product_price=float(item['price']),  # Convert Decimal to float for JSON serialization
                     quantity=item['quantity']
                 )
             

@@ -176,9 +176,7 @@ SESSION_COOKIE_AGE = 86400 * 7  # 7 days
 SESSION_SAVE_EVERY_REQUEST = False
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = not DEBUG  # True in production with HTTPS
-# Use PickleSerializer to handle Decimal and other Python objects
-# Note: JSONSerializer (default) doesn't support Decimal
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+# Note: Using default JSONSerializer - ensure no Decimal values stored in session (convert to float in cart.py)
 
 # Security settings for production
 if not DEBUG:
