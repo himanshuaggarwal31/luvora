@@ -4,7 +4,8 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
+| 1.1.x   | :white_check_mark: |
+| 1.0.x   | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -42,8 +43,23 @@ We will respond within 48 hours and work with you to address the issue.
    - Use Razorpay webhook secrets
    - Verify all payment signatures server-side
    - Never trust client-side payment data
+   - Use test mode for development (no real keys needed)
+   - Keep payment keys in environment variables only
 
-5. **Regular Updates**
+5. **Email Security**
+   - Use app-specific passwords (not main email password)
+   - Enable TLS for SMTP connections
+   - Use console backend for development
+   - Never log sensitive customer information
+   - Sanitize data before including in emails
+
+6. **PDF Invoice Security**
+   - Store invoices securely (consider encryption for production)
+   - Validate order ownership before generating invoices
+   - Use secure temporary file handling
+   - Consider adding watermarks for authenticity
+
+7. **Regular Updates**
    - Keep dependencies updated: `pip list --outdated`
    - Monitor security advisories for Django, Wagtail
    - Apply security patches promptly
@@ -62,6 +78,9 @@ We will respond within 48 hours and work with you to address the issue.
 3. **SQL Injection**: Use Django ORM (avoid raw SQL)
 4. **Session Security**: Secure cookies in production
 5. **Rate Limiting**: Consider adding rate limiting for production
+6. **Payment Verification**: All Razorpay payments verified server-side
+7. **Email Attachments**: Invoice PDFs generated server-side only
+8. **Session Serialization**: Using JSON serializer (decimal values converted)
 
 ## Security Headers (Nginx)
 

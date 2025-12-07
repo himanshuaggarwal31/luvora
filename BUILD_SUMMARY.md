@@ -8,7 +8,9 @@ You now have a **complete, production-ready e-commerce platform** with the follo
 - ✅ **Product Management** - Full CRUD via Wagtail CMS
 - ✅ **Shopping Cart** - Session-based with real-time updates
 - ✅ **Checkout System** - Complete order processing
-- ✅ **Payment Gateway** - Razorpay integration with secure verification
+- ✅ **Payment Gateway** - Razorpay integration with test mode fallback
+- ✅ **PDF Invoices** - Professional invoice generation with ReportLab
+- ✅ **Email Notifications** - Automated order confirmations with invoice attachments
 - ✅ **Coupon System** - Percentage & fixed amount discounts
 - ✅ **Order Management** - Complete order tracking
 - ✅ **Inventory System** - Real-time stock management
@@ -17,10 +19,12 @@ You now have a **complete, production-ready e-commerce platform** with the follo
 - ✅ **Admin Panels** - Wagtail CMS + Django Admin
 
 ### Technical Stack
-- **Backend**: Django 4.2 + Wagtail 5.2
+- **Backend**: Django 5.1.15 + Wagtail 6.4.2
 - **Frontend**: Bootstrap 5 + Bootstrap Icons
-- **Database**: PostgreSQL/Oracle support (+ SQLite for dev)
-- **Payments**: Razorpay integration
+- **Database**: SQLite (dev), PostgreSQL/Oracle (production)
+- **Payments**: Razorpay integration with secure verification
+- **PDF Generation**: ReportLab 4.4.5 + WeasyPrint 67.0
+- **Email**: SMTP support (Gmail, SendGrid, etc.)
 - **Server**: Gunicorn + Nginx
 - **Deployment**: Docker + Docker Compose
 - **Security**: CSRF, XSS protection, secure sessions
@@ -50,7 +54,7 @@ You now have a **complete, production-ready e-commerce platform** with the follo
   └── asgi.py              - ASGI interface
 ```
 
-### Shop App (11)
+### Shop App (14)
 ```
 ✓ shop/
   ├── __init__.py
@@ -62,9 +66,12 @@ You now have a **complete, production-ready e-commerce platform** with the follo
   ├── admin.py             - Admin customization
   ├── cart.py              - Shopping cart logic
   ├── context_processors.py - Template context
+  ├── invoice.py           - PDF invoice generation
+  ├── email_utils.py       - Email notification system
   └── management/
       └── commands/
-          └── populate_sample_data.py - Sample data loader
+          ├── populate_sample_data.py - Sample data loader
+          └── test_invoice.py         - Invoice testing tool
 ```
 
 ### Home App (3)
@@ -75,7 +82,7 @@ You now have a **complete, production-ready e-commerce platform** with the follo
   └── models.py            - HomePage model
 ```
 
-### Templates (9)
+### Templates (13)
 ```
 ✓ templates/
   ├── base.html                    - Master template
@@ -89,15 +96,23 @@ You now have a **complete, production-ready e-commerce platform** with the follo
       ├── payment.html            - Payment page (Razorpay)
       ├── order_success.html      - Order confirmation
       ├── payment_failed.html     - Payment failure
-      └── category_detail.html    - Category view
+      ├── category_detail.html    - Category view
+      └── emails/
+          ├── order_confirmation.html      - Order email (HTML)
+          ├── order_confirmation.txt       - Order email (text)
+          ├── order_status_update.html     - Status email (HTML)
+          └── order_status_update.txt      - Status email (text)
 ```
 
-### Documentation (9)
+### Documentation (12)
 ```
-✓ README.md                - Complete documentation (300+ lines)
-✓ QUICKSTART.md           - Quick setup guide
-✓ GETTING_STARTED.md      - First steps guide
+✓ README.md                - Complete documentation (400+ lines)
+✓ QUICKSTART.md           - Quick setup guide (3 minutes)
+✓ GETTING_STARTED.md      - First steps guide with testing
 ✓ PROJECT_STRUCTURE.md    - Architecture overview
+✓ PAYMENT_SETUP.md        - Payment & invoice setup guide
+✓ INTEGRATION_COMPLETE.md - Payment integration summary
+✓ PYTHON_VERSION_ISSUE.md - Python 3.12 requirement notes
 ✓ SECURITY.md             - Security policy
 ✓ CONTRIBUTING.md         - Contribution guidelines
 ✓ CHANGELOG.md            - Version history

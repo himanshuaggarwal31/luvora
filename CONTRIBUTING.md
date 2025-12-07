@@ -11,8 +11,10 @@ Thank you for considering contributing to LUVORA! We welcome contributions from 
    - Clear title and description
    - Steps to reproduce
    - Expected vs actual behavior
-   - Environment details (OS, Python version, etc.)
+   - Environment details (OS, Python 3.12+, Django version, etc.)
    - Screenshots (if applicable)
+
+**Note**: This project requires **Python 3.12 or 3.13**. Python 3.14 is not yet supported by Django/Wagtail.
 
 ### Suggesting Features
 
@@ -88,7 +90,15 @@ python manage.py test
 # With coverage
 coverage run --source='.' manage.py test
 coverage report
+
+# Test invoice generation
+python manage.py test_invoice ORDER_ID --save --email
 ```
+
+### Testing Payment Features
+- Use Razorpay test mode for payment testing
+- Test invoice generation with sample orders
+- Verify email notifications (check console output in dev mode)
 
 ## Documentation
 

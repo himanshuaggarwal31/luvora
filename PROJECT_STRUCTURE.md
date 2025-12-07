@@ -13,7 +13,8 @@ luvora/
 ├── shop/                           # E-commerce application
 │   ├── management/
 │   │   └── commands/
-│   │       └── populate_sample_data.py  # Sample data loader
+│   │       ├── populate_sample_data.py  # Sample data loader
+│   │       └── test_invoice.py          # Invoice testing tool
 │   ├── migrations/                 # Database migrations
 │   ├── __init__.py
 │   ├── admin.py                    # Django admin configuration
@@ -23,7 +24,9 @@ luvora/
 │   ├── forms.py                    # Django forms
 │   ├── models.py                   # Data models (Product, Order, Coupon)
 │   ├── urls.py                     # Shop URL patterns
-│   └── views.py                    # View controllers
+│   ├── views.py                    # View controllers
+│   ├── invoice.py                  # PDF invoice generation
+│   └── email_utils.py              # Email notification system
 │
 ├── home/                           # Wagtail home app
 │   ├── migrations/
@@ -43,7 +46,12 @@ luvora/
 │       ├── payment.html            # Payment page
 │       ├── order_success.html      # Order confirmation
 │       ├── payment_failed.html     # Payment failure
-│       └── category_detail.html    # Category view
+│       ├── category_detail.html    # Category view
+│       └── emails/                 # Email templates
+│           ├── order_confirmation.html      # Order email (HTML)
+│           ├── order_confirmation.txt       # Order email (text)
+│           ├── order_status_update.html     # Status email (HTML)
+│           └── order_status_update.txt      # Status email (text)
 │
 ├── static/                         # Static files (CSS, JS, images)
 │   ├── css/
@@ -77,12 +85,17 @@ luvora/
 ├── setup.bat                       # Windows setup script
 │
 ├── manage.py                       # Django management script
+├── setup_pages.py                  # Automated page structure setup
 │
 ├── README.md                       # Main documentation
 ├── QUICKSTART.md                   # Quick setup guide
+├── GETTING_STARTED.md              # First steps guide
 ├── CHANGELOG.md                    # Version history
 ├── CONTRIBUTING.md                 # Contribution guidelines
 ├── SECURITY.md                     # Security policy
+├── PAYMENT_SETUP.md                # Payment integration guide
+├── INTEGRATION_COMPLETE.md         # Integration summary
+├── PYTHON_VERSION_ISSUE.md         # Python compatibility notes
 ├── LICENSE                         # MIT license
 └── PROJECT_STRUCTURE.md           # This file
 ```
@@ -98,6 +111,8 @@ luvora/
 - **models.py**: Product, Order, Coupon, Category models
 - **views.py**: Business logic (cart, checkout, payment)
 - **cart.py**: Session-based shopping cart implementation
+- **invoice.py**: PDF invoice generation with ReportLab
+- **email_utils.py**: Email notifications (order confirmations, status updates)
 - **forms.py**: User input forms (checkout, coupon)
 - **admin.py**: Django admin customization
 

@@ -56,10 +56,13 @@ Welcome to LUVORA! This file helps you navigate all the documentation.
   - `deploy.sh` (Linux/Mac)
 
 ### Project Information
-- **[CHANGELOG.md](CHANGELOG.md)** - Version history
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history (v1.1.0)
 - **[LICENSE](LICENSE)** - MIT License
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute
 - **[SECURITY.md](SECURITY.md)** - Security policy
+- **[PAYMENT_SETUP.md](PAYMENT_SETUP.md)** - Payment integration guide
+- **[INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md)** - Payment & invoice setup
+- **[PYTHON_VERSION_ISSUE.md](PYTHON_VERSION_ISSUE.md)** - Python compatibility notes
 
 ---
 
@@ -80,7 +83,11 @@ Welcome to LUVORA! This file helps you navigate all the documentation.
 → **[QUICKSTART.md](QUICKSTART.md)** - Database setup section
 
 #### Set up payments
-→ **[GETTING_STARTED.md](GETTING_STARTED.md)** - Razorpay section
+→ **[PAYMENT_SETUP.md](PAYMENT_SETUP.md)** - Complete payment setup guide
+→ **[GETTING_STARTED.md](GETTING_STARTED.md)** - Quick Razorpay setup
+
+#### Test invoices & emails
+→ **[INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md)** - Testing guide
 
 #### Add products
 → **[GETTING_STARTED.md](GETTING_STARTED.md)** - Managing content section
