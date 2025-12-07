@@ -324,8 +324,20 @@ def payment_callback(request):
         razorpay_order_id = request.POST.get('razorpay_order_id')
         razorpay_signature = request.POST.get('razorpay_signature')
         
+        logger.info(f"Payment callback received: payment_id={razorpay_payment_id}, order_id={razorpay_order_id}")
+        
+        if not razorpay_order_id:
+            logger.error("Payment callback missing razorpay_order_id")
+            messages.error(request, "Invalid payment data. Please contact support.")
+            return redirect('shop:payment_failed')
+        
         # Get order
-        order = get_object_or_404(Order, razorpay_order_id=razorpay_order_id)
+        try:
+            order = Order.objects.get(razorpay_order_id=razorpay_order_id)
+        except Order.DoesNotExist:
+            logger.error(f"Order not found for razorpay_order_id: {razorpay_order_id}")
+            messages.error(request, "Order not found. Please contact support.")
+            return redirect('shop:payment_failed')
         
         # Verify signature
         client = razorpay.Client(
@@ -360,7 +372,7 @@ def payment_callback(request):
         return redirect('shop:payment_failed')
     
     except Exception as e:
-        logger.error(f"Payment callback error: {str(e)}")
+        logger.exception(f"Payment callback error: {str(e)}")
         messages.error(request, "Payment processing error. Please contact support.")
         return redirect('shop:payment_failed')
 
