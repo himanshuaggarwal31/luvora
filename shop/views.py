@@ -2,13 +2,16 @@
 Views for shop app
 """
 import time
+import hmac
+import hashlib
+import json
 from decimal import Decimal
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 import razorpay
 import logging
@@ -390,3 +393,181 @@ def category_detail(request, slug):
         'products': products,
     }
     return render(request, 'shop/category_detail.html', context)
+
+
+@csrf_exempt
+def razorpay_webhook(request):
+    """
+    Handle Razorpay webhooks.
+    Verifies signature when RAZORPAY_WEBHOOK_SECRET is set.
+    Dev mode: allows unverified webhooks if DEBUG=True and secret is blank.
+    """
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Only POST allowed")
+    
+    # Read raw body
+    payload = request.body or b""
+    signature = request.headers.get("X-Razorpay-Signature") or request.META.get("HTTP_X_RAZORPAY_SIGNATURE")
+    
+    secret = getattr(settings, "RAZORPAY_WEBHOOK_SECRET", "") or ""
+    
+    # Dev mode bypass: if no secret and DEBUG=True, allow processing without verification
+    if not secret and settings.DEBUG:
+        logger.warning(
+            "Razorpay webhook signature verification SKIPPED (DEBUG=True, no secret set). "
+            "This is ONLY safe for local development."
+        )
+    else:
+        # Production/secure mode: require signature and verify it
+        if not signature:
+            logger.warning("Razorpay webhook missing signature header")
+            return HttpResponseForbidden("signature missing")
+        
+        if not secret:
+            logger.error("RAZORPAY_WEBHOOK_SECRET not configured but signature provided")
+            return HttpResponseForbidden("webhook secret not configured")
+        
+        # Compute HMAC-SHA256 and compare
+        computed_hmac = hmac.new(
+            key=secret.encode("utf-8"),
+            msg=payload,
+            digestmod=hashlib.sha256
+        ).hexdigest()
+        
+        if not hmac.compare_digest(computed_hmac, signature):
+            logger.warning("Invalid Razorpay webhook signature")
+            return HttpResponseForbidden("invalid signature")
+    
+    # Parse JSON payload
+    try:
+        event = json.loads(payload.decode("utf-8"))
+    except Exception as e:
+        logger.exception("Invalid JSON in webhook payload")
+        return HttpResponseBadRequest("invalid json")
+    
+    event_type = event.get("event")
+    payload_data = event.get("payload", {})
+    logger.info(f"Razorpay webhook received: {event_type}")
+    
+    # Handle specific events
+    if event_type == "payment.captured":
+        payment = payload_data.get("payment", {}).get("entity", {})
+        payment_id = payment.get("id")
+        order_id = payment.get("notes", {}).get("order_id") or payment.get("order_id")
+        amount = payment.get("amount")  # in paise
+        
+        logger.info(f"Payment captured: payment_id={payment_id}, order_id={order_id}, amount={amount}")
+        
+        # TODO: Look up Order by order_id or razorpay_order_id and mark as paid if needed
+        # Example:
+        # try:
+        #     order = Order.objects.get(order_id=order_id)
+        #     if order.paid:
+        #         logger.info(f"Order {order_id} already marked as paid")
+        #     else:
+        #         order.mark_as_paid(payment_id, signature or "")
+        #         logger.info(f"Order {order_id} marked as paid via webhook")
+        # except Order.DoesNotExist:
+        #     logger.warning(f"Order {order_id} not found for payment.captured webhook")
+    
+    elif event_type == "payment.failed":
+        payment = payload_data.get("payment", {}).get("entity", {})
+        logger.info(f"Payment failed: {payment.get('id')}")
+    
+    elif event_type == "payment.authorized":
+        payment = payload_data.get("payment", {}).get("entity", {})
+        logger.info(f"Payment authorized: {payment.get('id')}")
+    
+    # Add other event handlers as needed
+    
+    # Respond with 200 to acknowledge receipt
+    return HttpResponse("ok")
+
+
+@csrf_exempt
+def razorpay_webhook(request):
+    """
+    Handle Razorpay webhooks.
+    Verifies signature when RAZORPAY_WEBHOOK_SECRET is set.
+    Dev mode: allows unverified webhooks if DEBUG=True and secret is blank.
+    """
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Only POST allowed")
+    
+    # Read raw body
+    payload = request.body or b""
+    signature = request.headers.get("X-Razorpay-Signature") or request.META.get("HTTP_X_RAZORPAY_SIGNATURE")
+    
+    secret = getattr(settings, "RAZORPAY_WEBHOOK_SECRET", "") or ""
+    
+    # Dev mode bypass: if no secret and DEBUG=True, allow processing without verification
+    if not secret and settings.DEBUG:
+        logger.warning(
+            "Razorpay webhook signature verification SKIPPED (DEBUG=True, no secret set). "
+            "This is ONLY safe for local development."
+        )
+    else:
+        # Production/secure mode: require signature and verify it
+        if not signature:
+            logger.warning("Razorpay webhook missing signature header")
+            return HttpResponseForbidden("signature missing")
+        
+        if not secret:
+            logger.error("RAZORPAY_WEBHOOK_SECRET not configured but signature provided")
+            return HttpResponseForbidden("webhook secret not configured")
+        
+        # Compute HMAC-SHA256 and compare
+        computed_hmac = hmac.new(
+            key=secret.encode("utf-8"),
+            msg=payload,
+            digestmod=hashlib.sha256
+        ).hexdigest()
+        
+        if not hmac.compare_digest(computed_hmac, signature):
+            logger.warning("Invalid Razorpay webhook signature")
+            return HttpResponseForbidden("invalid signature")
+    
+    # Parse JSON payload
+    try:
+        event = json.loads(payload.decode("utf-8"))
+    except Exception as e:
+        logger.exception("Invalid JSON in webhook payload")
+        return HttpResponseBadRequest("invalid json")
+    
+    event_type = event.get("event")
+    payload_data = event.get("payload", {})
+    logger.info(f"Razorpay webhook received: {event_type}")
+    
+    # Handle specific events
+    if event_type == "payment.captured":
+        payment = payload_data.get("payment", {}).get("entity", {})
+        payment_id = payment.get("id")
+        order_id = payment.get("notes", {}).get("order_id") or payment.get("order_id")
+        amount = payment.get("amount")  # in paise
+        
+        logger.info(f"Payment captured: payment_id={payment_id}, order_id={order_id}, amount={amount}")
+        
+        # TODO: Look up Order by order_id or razorpay_order_id and mark as paid if needed
+        # Example:
+        # try:
+        #     order = Order.objects.get(order_id=order_id)
+        #     if order.paid:
+        #         logger.info(f"Order {order_id} already marked as paid")
+        #     else:
+        #         order.mark_as_paid(payment_id, signature or "")
+        #         logger.info(f"Order {order_id} marked as paid via webhook")
+        # except Order.DoesNotExist:
+        #     logger.warning(f"Order {order_id} not found for payment.captured webhook")
+    
+    elif event_type == "payment.failed":
+        payment = payload_data.get("payment", {}).get("entity", {})
+        logger.info(f"Payment failed: {payment.get('id')}")
+    
+    elif event_type == "payment.authorized":
+        payment = payload_data.get("payment", {}).get("entity", {})
+        logger.info(f"Payment authorized: {payment.get('id')}")
+    
+    # Add other event handlers as needed
+    
+    # Respond with 200 to acknowledge receipt
+    return HttpResponse("ok")

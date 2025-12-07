@@ -28,4 +28,7 @@ urlpatterns = [
     path('test-payment/<str:order_id>/', views.test_payment, name='test_payment'),  # Dev mode only
     path('order/success/<str:order_id>/', views.order_success, name='order_success'),
     path('payment/failed/', views.payment_failed, name='payment_failed'),
+    
+    # Razorpay webhook
+    path('webhook/', views.razorpay_webhook, name='razorpay_webhook'),
 ]
