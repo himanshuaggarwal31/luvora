@@ -13,6 +13,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
 import razorpay
 import logging
 
@@ -325,17 +327,22 @@ def payment_callback(request):
         razorpay_signature = request.POST.get('razorpay_signature')
         
         logger.info(f"Payment callback received: payment_id={razorpay_payment_id}, order_id={razorpay_order_id}")
+        logger.info(f"POST data: {dict(request.POST)}")
         
         if not razorpay_order_id:
             logger.error("Payment callback missing razorpay_order_id")
             messages.error(request, "Invalid payment data. Please contact support.")
             return redirect('shop:payment_failed')
         
-        # Get order
+        # Get order - try to find by razorpay_order_id
         try:
             order = Order.objects.get(razorpay_order_id=razorpay_order_id)
+            logger.info(f"Found order: {order.order_id}")
         except Order.DoesNotExist:
             logger.error(f"Order not found for razorpay_order_id: {razorpay_order_id}")
+            # List all orders with razorpay_order_id set for debugging
+            all_orders = Order.objects.exclude(razorpay_order_id__isnull=True).exclude(razorpay_order_id='')
+            logger.error(f"Available orders with razorpay_order_id: {[(o.order_id, o.razorpay_order_id) for o in all_orders[:5]]}")
             messages.error(request, "Order not found. Please contact support.")
             return redirect('shop:payment_failed')
         
@@ -463,9 +470,19 @@ def razorpay_webhook(request):
     
     # Handle specific events
     if event_type == "payment.captured":
-        payment = payload_data.get("payment", {}).get("entity", {})
-        payment_id = payment.get("id")
-        order_id = payment.get("notes", {}).get("order_id") or payment.get("order_id")
+        # Razorpay sends: payload.payment.entity (dict) or payload.payment (list of entities)
+        payment_data = payload_data.get("payment", {})
+        if isinstance(payment_data, list) and len(payment_data) > 0:
+            payment = payment_data[0]  # Take first payment from list
+        elif isinstance(payment_data, dict):
+            payment = payment_data.get("entity", payment_data)
+        else:
+            payment = {}
+        
+        payment_id = payment.get("id") if payment else None
+        # Try to get order_id from notes or directly
+        notes = payment.get("notes", {}) if isinstance(payment.get("notes"), dict) else {}
+        order_id = notes.get("order_id") or payment.get("order_id")
         amount = payment.get("amount")  # in paise
         
         logger.info(f"Payment captured: payment_id={payment_id}, order_id={order_id}, amount={amount}")
@@ -483,101 +500,24 @@ def razorpay_webhook(request):
         #     logger.warning(f"Order {order_id} not found for payment.captured webhook")
     
     elif event_type == "payment.failed":
-        payment = payload_data.get("payment", {}).get("entity", {})
-        logger.info(f"Payment failed: {payment.get('id')}")
+        payment_data = payload_data.get("payment", {})
+        if isinstance(payment_data, list) and len(payment_data) > 0:
+            payment = payment_data[0]
+        elif isinstance(payment_data, dict):
+            payment = payment_data.get("entity", payment_data)
+        else:
+            payment = {}
+        logger.info(f"Payment failed: {payment.get('id') if payment else 'unknown'}")
     
     elif event_type == "payment.authorized":
-        payment = payload_data.get("payment", {}).get("entity", {})
-        logger.info(f"Payment authorized: {payment.get('id')}")
-    
-    # Add other event handlers as needed
-    
-    # Respond with 200 to acknowledge receipt
-    return HttpResponse("ok")
-
-
-@csrf_exempt
-def razorpay_webhook(request):
-    """
-    Handle Razorpay webhooks.
-    Verifies signature when RAZORPAY_WEBHOOK_SECRET is set.
-    Dev mode: allows unverified webhooks if DEBUG=True and secret is blank.
-    """
-    if request.method != 'POST':
-        return HttpResponseBadRequest("Only POST allowed")
-    
-    # Read raw body
-    payload = request.body or b""
-    signature = request.headers.get("X-Razorpay-Signature") or request.META.get("HTTP_X_RAZORPAY_SIGNATURE")
-    
-    secret = getattr(settings, "RAZORPAY_WEBHOOK_SECRET", "") or ""
-    
-    # Dev mode bypass: if no secret and DEBUG=True, allow processing without verification
-    if not secret and settings.DEBUG:
-        logger.warning(
-            "Razorpay webhook signature verification SKIPPED (DEBUG=True, no secret set). "
-            "This is ONLY safe for local development."
-        )
-    else:
-        # Production/secure mode: require signature and verify it
-        if not signature:
-            logger.warning("Razorpay webhook missing signature header")
-            return HttpResponseForbidden("signature missing")
-        
-        if not secret:
-            logger.error("RAZORPAY_WEBHOOK_SECRET not configured but signature provided")
-            return HttpResponseForbidden("webhook secret not configured")
-        
-        # Compute HMAC-SHA256 and compare
-        computed_hmac = hmac.new(
-            key=secret.encode("utf-8"),
-            msg=payload,
-            digestmod=hashlib.sha256
-        ).hexdigest()
-        
-        if not hmac.compare_digest(computed_hmac, signature):
-            logger.warning("Invalid Razorpay webhook signature")
-            return HttpResponseForbidden("invalid signature")
-    
-    # Parse JSON payload
-    try:
-        event = json.loads(payload.decode("utf-8"))
-    except Exception as e:
-        logger.exception("Invalid JSON in webhook payload")
-        return HttpResponseBadRequest("invalid json")
-    
-    event_type = event.get("event")
-    payload_data = event.get("payload", {})
-    logger.info(f"Razorpay webhook received: {event_type}")
-    
-    # Handle specific events
-    if event_type == "payment.captured":
-        payment = payload_data.get("payment", {}).get("entity", {})
-        payment_id = payment.get("id")
-        order_id = payment.get("notes", {}).get("order_id") or payment.get("order_id")
-        amount = payment.get("amount")  # in paise
-        
-        logger.info(f"Payment captured: payment_id={payment_id}, order_id={order_id}, amount={amount}")
-        
-        # TODO: Look up Order by order_id or razorpay_order_id and mark as paid if needed
-        # Example:
-        # try:
-        #     order = Order.objects.get(order_id=order_id)
-        #     if order.paid:
-        #         logger.info(f"Order {order_id} already marked as paid")
-        #     else:
-        #         order.mark_as_paid(payment_id, signature or "")
-        #         logger.info(f"Order {order_id} marked as paid via webhook")
-        # except Order.DoesNotExist:
-        #     logger.warning(f"Order {order_id} not found for payment.captured webhook")
-    
-    elif event_type == "payment.failed":
-        payment = payload_data.get("payment", {}).get("entity", {})
-        logger.info(f"Payment failed: {payment.get('id')}")
-    
-    elif event_type == "payment.authorized":
-        payment = payload_data.get("payment", {}).get("entity", {})
-        logger.info(f"Payment authorized: {payment.get('id')}")
+        payment_data = payload_data.get("payment", {})
+        if isinstance(payment_data, list) and len(payment_data) > 0:
+            payment = payment_data[0]
+        elif isinstance(payment_data, dict):
+            payment = payment_data.get("entity", payment_data)
+        else:
+            payment = {}
+        logger.info(f"Payment authorized: {payment.get('id') if payment else 'unknown'}")
     
     # Add other event handlers as needed
     
