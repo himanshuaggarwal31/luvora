@@ -471,6 +471,10 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.product_name} x {self.quantity}"
     
+    def get_total_price(self):
+        """Get total price for this item (quantity * price)"""
+        return self.line_total
+    
     def save(self, *args, **kwargs):
         self.line_total = self.product_price * self.quantity
         super().save(*args, **kwargs)
