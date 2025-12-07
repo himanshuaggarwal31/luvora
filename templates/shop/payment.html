@@ -90,13 +90,6 @@ document.getElementById('rzp-button').onclick = function(e) {
             form.method = 'POST';
             form.action = "{{ callback_url }}";
             
-            // Add CSRF token
-            var csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrfmiddlewaretoken';
-            csrfInput.value = '{{ csrf_token }}';
-            form.appendChild(csrfInput);
-            
             var inputs = {
                 'razorpay_payment_id': response.razorpay_payment_id,
                 'razorpay_order_id': response.razorpay_order_id,
