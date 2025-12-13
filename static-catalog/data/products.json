@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Cotton Bedsheet",
+    "slug": "premium-cotton-bedsheet",
+    "price": 2599,
+    "category": "Bedsheets",
+    "image": "images/products/bedsheet-1.jpg",
+    "description": "Luxurious 100% cotton bedsheet with 400 thread count. Soft, breathable, and durable. Available in multiple colors.",
+    "features": [
+      "100% Premium Cotton",
+      "400 Thread Count",
+      "Machine Washable",
+      "Fade Resistant",
+      "Queen Size (90x100 inches)"
+    ],
+    "inStock": true
+  },
+  {
+    "id": 2,
+    "name": "Floral Print Bedsheet Set",
+    "slug": "floral-print-bedsheet",
+    "price": 3999,
+    "category": "Bedsheets",
+    "image": "images/products/bedsheet-2.jpg",
+    "description": "Beautiful floral print bedsheet set with 2 pillow covers. Premium microfiber fabric with vibrant colors.",
+    "features": [
+      "Microfiber Fabric",
+      "Includes 2 Pillow Covers",
+      "Vibrant Colors",
+      "Anti-Wrinkle",
+      "King Size (108x108 inches)"
+    ],
+    "inStock": true
+  },
+  {
+    "id": 3,
+    "name": "Luxury Silk Bedsheet",
+    "slug": "luxury-silk-bedsheet",
+    "price": 7999,
+    "category": "Bedsheets",
+    "image": "images/products/bedsheet-3.jpg",
+    "description": "Ultra-premium silk bedsheet for the ultimate sleep experience. Hypoallergenic and temperature regulating.",
+    "features": [
+      "100% Mulberry Silk",
+      "Hypoallergenic",
+      "Temperature Regulating",
+      "Luxurious Feel",
+      "King Size"
+    ],
+    "inStock": true
+  }
+]

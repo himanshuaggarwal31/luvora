@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse our collection of premium bedsheets and home textiles.">
+    <title>Products - LUVORA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-icon">🛍️</span>
+                        <span class="logo-text">LUVORA</span>
+                    </a>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html" class="active">Products</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Products</h1>
+            <p>Discover premium quality home textiles</p>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="products-layout">
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <div class="filter-group">
+                        <h3>Search</h3>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3>Categories</h3>
+                        <div class="filter-options">
+                            <label>
+                                <input type="radio" name="category" value="all" checked>
+                                <span>All Products</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="category" value="Bedsheets">
+                                <span>Bedsheets</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="category" value="Pillows">
+                                <span>Pillows</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="category" value="Comforters">
+                                <span>Comforters</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Price Range</h3>
+                        <div class="filter-options">
+                            <label>
+                                <input type="radio" name="price" value="all" checked>
+                                <span>All Prices</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="price" value="0-3000">
+                                <span>Under ₹3,000</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="price" value="3000-6000">
+                                <span>₹3,000 - ₹6,000</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="price" value="6000-99999">
+                                <span>Above ₹6,000</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Availability</h3>
+                        <div class="filter-options">
+                            <label>
+                                <input type="checkbox" id="inStockOnly">
+                                <span>In Stock Only</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary btn-block" id="clearFilters">Clear Filters</button>
+                </aside>
+
+                <!-- Products Grid -->
+                <div class="products-main">
+                    <div class="products-header">
+                        <p class="products-count" id="productsCount">Showing all products</p>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="default">Sort by: Default</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="name">Name: A to Z</option>
+                        </select>
+                    </div>
+
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be loaded dynamically -->
+                    </div>
+
+                    <div class="no-products" id="noProducts" style="display: none;">
+                        <p>No products found matching your criteria.</p>
+                        <button class="btn btn-primary" id="resetFilters">Reset Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>LUVORA</h3>
+                    <p>Your premium destination for quality home textiles and bedding essentials.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="products.html?category=bedsheets">Bedsheets</a></li>
+                        <li><a href="products.html?category=pillows">Pillows</a></li>
+                        <li><a href="products.html?category=comforters">Comforters</a></li>
+                        <li><a href="products.html?category=curtains">Curtains</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li>📧 info@luvora.com</li>
+                        <li>📞 +91-9999999999</li>
+                        <li>📍 Gurugram, Haryana, India</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LUVORA. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/catalog.js"></script>
+</body>
+</html>
