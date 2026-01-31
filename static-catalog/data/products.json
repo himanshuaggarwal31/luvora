@@ -49,5 +49,39 @@
       "King Size"
     ],
     "inStock": true
+  },
+  {
+    "id": 4,
+    "name": "Memory Foam Pillow",
+    "slug": "memory-foam-pillow",
+    "price": 1499,
+    "category": "Pillows",
+    "image": "images/products/pillow-1.jpg",
+    "description": "Ergonomic memory foam pillow for neck and spine support. Perfect for side and back sleepers.",
+    "features": [
+      "Memory Foam Technology",
+      "Cervical Support",
+      "Breathable Cover",
+      "Removable & Washable",
+      "Standard Size"
+    ],
+    "inStock": true
+  },
+  {
+    "id": 5,
+    "name": "Winter Comforter",
+    "slug": "winter-comforter",
+    "price": 5499,
+    "category": "Comforters",
+    "image": "images/products/comforter-1.jpg",
+    "description": "Ultra-warm winter comforter with microfiber filling. Lightweight yet incredibly cozy for cold nights.",
+    "features": [
+      "Microfiber Filling",
+      "Lightweight & Warm",
+      "All Season Use",
+      "Machine Washable",
+      "Queen Size"
+    ],
+    "inStock": true
   }
 ]

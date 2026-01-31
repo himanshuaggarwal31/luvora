@@ -1,7 +1,3 @@
-.venv\Scripts\activate.ps1; python manage.py runserver
-
-
-
 ngrok
 
 .\ngrok config add-authtoken 36W4lcxcPeeV4liYsQ17icoGA98_56U2etkUoUWRKykF5aMiS
@@ -12,6 +8,8 @@ ngrok
 GiPIqOTgLo8A0DqXwbt7Haa1TOABl5ijy2tnUyeCR1k
 
 ----------------
+
+.venv\Scripts\activate.ps1; python manage.py runserver
 
 https://unalleviated-vicente-clownishly.ngrok-free.dev/admin/
 
