@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - MRP & Discount Display</title>
+    <link rel="stylesheet" href="css/style.css?v=2.0">
+    <style>
+        body {
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #8B4513;
+        }
+        h2 {
+            color: #D2691E;
+            margin-bottom: 1rem;
+        }
+        .status {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Enhancement Test Page</h1>
+        
+        <!-- Test 1: Discount Badge -->
+        <div class="test-section">
+            <h2>Test 1: Discount Badge</h2>
+            <div style="position: relative; width: 200px; height: 200px; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                <span class="discount-badge">35% OFF</span>
+                <span style="font-size: 3rem;">🛏️</span>
+            </div>
+            <div class="status success">✅ If you see an animated red badge above, it works!</div>
+        </div>
+
+        <!-- Test 2: MRP Strikethrough -->
+        <div class="test-section">
+            <h2>Test 2: MRP & Price Display</h2>
+            <div class="product-pricing">
+                <span class="product-mrp">₹3,999</span>
+                <span class="product-price">₹2,599</span>
+            </div>
+            <div class="status success">✅ MRP (₹3,999) should have strikethrough</div>
+        </div>
+
+        <!-- Test 3: Product Detail Price -->
+        <div class="test-section">
+            <h2>Test 3: Product Detail Price Display</h2>
+            <div class="price-container">
+                <span class="current-price">₹2,599</span>
+                <span class="original-price">₹3,999</span>
+                <span class="discount-percentage">35% OFF</span>
+            </div>
+            <div class="status success">✅ Large price, strikethrough MRP, and discount badge</div>
+        </div>
+
+        <!-- Test 4: Floating WhatsApp -->
+        <div class="test-section">
+            <h2>Test 4: Floating WhatsApp Button</h2>
+            <p>Look at the bottom-right corner of the page!</p>
+            <div class="status success">✅ You should see a green floating button with animation</div>
+        </div>
+
+        <!-- Test 5: WhatsApp Button Inline -->
+        <div class="test-section">
+            <h2>Test 5: Inline WhatsApp Button</h2>
+            <button class="btn btn-primary btn-whatsapp">
+                <span>💬</span> WhatsApp Inquiry
+            </button>
+            <div class="status success">✅ Green gradient button with hover effect</div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="test-section" style="background: #fff3cd; border-color: #ffc107;">
+            <h2>📋 Clear Browser Cache Instructions</h2>
+            <p><strong>Windows (Chrome/Edge):</strong> Press <code>Ctrl + Shift + Delete</code> → Check "Cached images and files" → Click "Clear data"</p>
+            <p><strong>Or Hard Refresh:</strong> Press <code>Ctrl + Shift + R</code> or <code>Ctrl + F5</code></p>
+            <p><strong>After clearing cache:</strong> Go back to products.html and product-detail.html</p>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918920215965?text=Hi%20LUVORA!%20I'm%20interested%20in%20your%20products." 
+       class="floating-whatsapp" 
+       target="_blank" 
+       title="Chat on WhatsApp">
+        💬
+    </a>
+
+    <script>
+        console.log('✅ Test page loaded');
+        console.log('✅ CSS loaded with cache-busting parameter');
+        
+        // Check if discount badge exists
+        const badge = document.querySelector('.discount-badge');
+        if (badge) {
+            console.log('✅ Discount badge found in DOM');
+        } else {
+            console.error('❌ Discount badge NOT found');
+        }
+        
+        // Check if floating WhatsApp exists
+        const floatingWA = document.querySelector('.floating-whatsapp');
+        if (floatingWA) {
+            console.log('✅ Floating WhatsApp button found');
+        } else {
+            console.error('❌ Floating WhatsApp NOT found');
+        }
+        
+        // Check CSS styles
+        if (badge) {
+            const styles = window.getComputedStyle(badge);
+            console.log('Discount badge background:', styles.background);
+            console.log('Discount badge position:', styles.position);
+        }
+    </script>
+</body>
+</html>

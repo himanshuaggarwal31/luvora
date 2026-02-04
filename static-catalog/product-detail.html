@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Product Details - LUVORA">
+    <title>Product Details - LUVORA</title>
+    <link rel="stylesheet" href="css/style.css?v=4.2">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-icon">🛍️</span>
+                        <span class="logo-text">LUVORA</span>
+                    </a>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html" class="active">Products</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="products.html">Products</a>
+            <span>/</span>
+            <span id="breadcrumbCategory">Loading...</span>
+            <span>/</span>
+            <span id="breadcrumbProduct">Loading...</span>
+        </div>
+    </section>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail-section">
+        <div class="container">
+            <div class="product-detail-grid">
+                <!-- Image Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image-container">
+                        <img id="mainImage" src="" alt="" class="main-image">
+                        <div class="image-zoom-indicator">🔍 Click to zoom</div>
+                    </div>
+                    <div class="thumbnail-container" id="thumbnailContainer">
+                        <!-- Thumbnails will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <div class="product-category" id="productCategory"></div>
+                    <h1 class="product-title" id="productTitle">Loading...</h1>
+                    
+                    <div class="product-price-section">
+                        <span class="product-price" id="productPrice">₹0</span>
+                        <span class="product-stock" id="productStock"></span>
+                    </div>
+
+                    <div class="product-description" id="productDescription">
+                        <p>Loading product details...</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-whatsapp" id="whatsappBtn">
+                            <span>💬</span> WhatsApp Inquiry
+                        </button>
+                        <button class="btn btn-secondary" id="emailBtn">
+                            <span>📧</span> Email Us
+                        </button>
+                    </div>
+
+                    <!-- Product Features -->
+                    <div class="product-features" id="productFeatures">
+                        <h3>Key Features</h3>
+                        <ul id="featuresList">
+                            <!-- Features will be loaded dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Product Specifications -->
+                    <div class="product-specifications" id="productSpecifications">
+                        <h3>Specifications</h3>
+                        <table class="specs-table" id="specsTable">
+                            <!-- Specs will be loaded dynamically -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Details Tabs -->
+            <div class="product-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="details">Details</button>
+                    <button class="tab-btn" data-tab="care">Care Instructions</button>
+                    <button class="tab-btn" data-tab="shipping">Shipping & Returns</button>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="details">
+                        <div id="detailsContent">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="care">
+                        <h3>Care Instructions</h3>
+                        <ul id="careInstructions">
+                            <!-- Will be populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <div class="tab-pane" id="shipping">
+                        <h3>Shipping Information</h3>
+                        <ul>
+                            <li>🚚 Free shipping on orders above ₹2999</li>
+                            <!-- <li>📦 Orders processed within 1-2 business days</li>
+                            <li>🌍 Delivery across India in 3-7 business days</li> -->
+                            <li>📞 Contact us for bulk orders and custom delivery</li>
+                        </ul>
+                        
+                        <h3>Returns & Exchanges</h3>
+                        <ul>
+                            <!-- <li>↩️ 7-day return policy for unused items</li>
+                            <li>🔄 Easy exchange for size/color variations</li>
+                            <li>✅ Quality guarantee on all products</li> -->
+                            <li>📧 Contact luvorahomes25@gmail.com for returns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <div class="related-products">
+                <h2>You May Also Like</h2>
+                <div class="products-grid" id="relatedProductsGrid">
+                    <!-- Related products will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Modal for Zoom -->
+    <div class="image-modal" id="imageModal">
+        <span class="modal-close" id="modalClose">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-nav">
+            <button class="modal-prev" id="modalPrev">❮</button>
+            <button class="modal-next" id="modalNext">❯</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>LUVORA</h3>
+                    <p>Your premium destination for quality home textiles and bedding essentials.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="products.html?category=bedsheets">Bedsheets</a></li>
+                        <li><a href="products.html?category=pillows">Pillows</a></li>
+                        <li><a href="products.html?category=comforters">Comforters</a></li>
+                        <li><a href="products.html?category=curtains">Curtains</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li>📧 luvorahomes25@gmail.com</li>
+                        <li>📞 +91-8920215965</li>
+                        <li>📍 Gurugram, Haryana, India</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LUVORA. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918920215965?text=Hi%20LUVORA!%20I'm%20interested%20in%20your%20products." 
+       class="floating-whatsapp" 
+       target="_blank" 
+       title="Chat on WhatsApp"
+       id="floatingWhatsapp">
+        💬
+    </a>
+
+    <script src="js/main.js?v=4.1"></script>
+    <script src="js/product-detail.js?v=4.1"></script>
+</body>
+</html>

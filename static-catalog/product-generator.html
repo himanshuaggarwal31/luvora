@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LUVORA - Product JSON Generator">
+    <title>Product JSON Generator - LUVORA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <style>
+        .generator-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .generator-title {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .form-section-title {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: var(--error-color);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-input.error,
+        .form-textarea.error,
+        .form-select.error {
+            border-color: var(--error-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .dynamic-list {
+            margin-top: 1rem;
+        }
+
+        .dynamic-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dynamic-item input {
+            flex: 1;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-add {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .btn-remove {
+            background: var(--error-color);
+            color: white;
+            min-width: 80px;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .spec-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-inputs {
+            margin-top: 1rem;
+        }
+
+        .image-input-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .output-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .output-section.show {
+            display: block;
+        }
+
+        .json-output {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+
+        .copy-btn-container {
+            text-align: right;
+            margin-top: 1rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-hover);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        .id-display {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .generator-container {
+                padding: 1rem;
+            }
+
+            .spec-group {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-icon">🛍️</span>
+                        <span class="logo-text">LUVORA</span>
+                    </a>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="product-generator.html" class="active">Generator</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Generator Container -->
+    <div class="generator-container">
+        <h1 class="generator-title">Product JSON Generator</h1>
+
+        <form id="productForm">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h2 class="form-section-title">Basic Information</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Product ID (Auto-generated)</label>
+                    <div class="id-display" id="productId">Loading...</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Product Name</label>
+                    <input type="text" class="form-input" id="productName" required>
+                    <span class="error-message" id="nameError">Product name is required</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Slug (URL-friendly name)</label>
+                    <input type="text" class="form-input" id="productSlug" required placeholder="e.g., premium-cotton-bedsheet">
+                    <span class="error-message" id="slugError">Slug is required</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">MRP - Maximum Retail Price (₹)</label>
+                    <input type="number" class="form-input" id="productMRP" required min="0" step="1" placeholder="Original price before discount">
+                    <span class="error-message" id="mrpError">Valid MRP is required</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Selling Price (₹)</label>
+                    <input type="number" class="form-input" id="productPrice" required min="0" step="1" placeholder="Discounted/selling price">
+                    <span class="error-message" id="priceError">Valid price is required</span>
+                    <small style="color: var(--text-light); display: block; margin-top: 0.25rem;">Discount will be auto-calculated</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Category</label>
+                    <input type="text" class="form-input" id="productCategory" required placeholder="e.g., Bedsheets, Pillows, Comforters">
+                    <span class="error-message" id="categoryError">Category is required</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Short Description</label>
+                    <textarea class="form-textarea" id="productDescription" placeholder="Brief product description (1-2 sentences)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Detailed Description</label>
+                    <textarea class="form-textarea" id="productDetailedDescription" placeholder="Comprehensive product description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="inStock" checked>
+                        In Stock
+                    </label>
+                </div>
+            </div>
+
+            <!-- Images -->
+            <div class="form-section">
+                <h2 class="form-section-title">Images</h2>
+                
+                <div class="form-group">
+                    <label class="form-label required">Main Image Path (Auto-generated, editable)</label>
+                    <input type="text" class="form-input" id="mainImage" required placeholder="Auto-generated from product name">
+                    <span class="error-message" id="imageError">Main image path is required</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Gallery Images (Main + 5 additional - Auto-generated, editable)</label>
+                    <div class="dynamic-list" id="imageInputs">
+                        <div class="dynamic-item">
+                            <input type="text" class="form-input" placeholder="Auto-generated">
+                            <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                        </div>
+                        <div class="dynamic-item">
+                            <input type="text" class="form-input" placeholder="Auto-generated">
+                            <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                        </div>
+                        <div class="dynamic-item">
+                            <input type="text" class="form-input" placeholder="Auto-generated">
+                            <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                        </div>
+                        <div class="dynamic-item">
+                            <input type="text" class="form-input" placeholder="Auto-generated">
+                            <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                        </div>
+                        <div class="dynamic-item">
+                            <input type="text" class="form-input" placeholder="Auto-generated">
+                            <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                        </div>
+                        <div class="dynamic-item">
+                            <input type="text" class="form-input" placeholder="Auto-generated">
+                            <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-small btn-add" onclick="addImageInput()">+ Add Image</button>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="form-section">
+                <h2 class="form-section-title">Features</h2>
+                <div class="dynamic-list" id="featuresList">
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Feature 1">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-small btn-add" onclick="addFeature()">+ Add Feature</button>
+            </div>
+
+            <!-- Specifications -->
+            <div class="form-section">
+                <h2 class="form-section-title">Specifications</h2>
+                <div class="dynamic-list" id="specsList">
+                    <div class="spec-group">
+                        <input type="text" class="form-input" placeholder="Specification Key (e.g., Material)">
+                        <input type="text" class="form-input" placeholder="Specification Value">
+                    </div>
+                </div>
+                <button type="button" class="btn-small btn-add" onclick="addSpecification()">+ Add Specification</button>
+            </div>
+
+            <!-- Care Instructions -->
+            <div class="form-section">
+                <h2 class="form-section-title">Care Instructions</h2>
+                <div class="dynamic-list" id="careList">
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Care instruction 1">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-small btn-add" onclick="addCareInstruction()">+ Add Care Instruction</button>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button type="button" class="btn btn-primary" onclick="generateJSON()">Generate JSON</button>
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+            </div>
+        </form>
+
+        <!-- Output Section -->
+        <div class="output-section" id="outputSection">
+            <h2 class="form-section-title">Generated JSON</h2>
+            <div class="json-output" id="jsonOutput"></div>
+            <div class="copy-btn-container">
+                <button type="button" class="btn btn-success" onclick="copyJSON()">Copy JSON</button>
+                <button type="button" class="btn btn-primary" onclick="downloadJSON()">Download JSON</button>
+                <button type="button" class="btn btn-secondary" onclick="appendToFile()">Append to products.json</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        let nextProductId = 1;
+        let generatedProduct = null;
+
+        // Load existing products to get next ID
+        async function loadNextId() {
+            try {
+                const response = await fetch('data/products.json');
+                const products = await response.json();
+                if (products && products.length > 0) {
+                    nextProductId = Math.max(...products.map(p => p.id)) + 1;
+                }
+                document.getElementById('productId').textContent = nextProductId;
+                // Generate image paths if product name exists
+                if (document.getElementById('productName').value) {
+                    generateImagePaths();
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('productId').textContent = '1 (Could not load existing products)';
+                nextProductId = 1;
+            }
+        }
+
+        // Generate image paths based on product ID and slug
+        function generateImagePaths() {
+            const slug = document.getElementById('productSlug').value;
+            if (!slug) return;
+
+            const basePath = `images/products/${nextProductId}-${slug}`;
+            
+            // Main image
+            document.getElementById('mainImage').value = `${basePath}/${nextProductId}-${slug}-main.jpg`;
+            
+            // Gallery images (main image + 5 additional)
+            const galleryInputs = document.querySelectorAll('#imageInputs .dynamic-item input');
+            galleryInputs.forEach((input, index) => {
+                input.value = `${basePath}/${nextProductId}-${slug}-${index + 1}.jpg`;
+            });
+        }
+
+        // Auto-generate slug and image paths from product name
+        document.getElementById('productName').addEventListener('input', function() {
+            const slug = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            document.getElementById('productSlug').value = slug;
+            generateImagePaths();
+        });
+
+        // Add feature
+        function addFeature() {
+            const list = document.getElementById('featuresList');
+            const item = document.createElement('div');
+            item.className = 'dynamic-item';
+            item.innerHTML = `
+                <input type="text" class="form-input" placeholder="Feature">
+                <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+            `;
+            list.appendChild(item);
+        }
+
+        // Add specification
+        function addSpecification() {
+            const list = document.getElementById('specsList');
+            const item = document.createElement('div');
+            item.className = 'spec-group';
+            item.innerHTML = `
+                <input type="text" class="form-input" placeholder="Specification Key">
+                <input type="text" class="form-input" placeholder="Specification Value">
+                <button type="button" class="btn-small btn-remove" onclick="removeSpecItem(this)" style="grid-column: 1 / -1;">Remove</button>
+            `;
+            list.appendChild(item);
+        }
+
+        // Add care instruction
+        function addCareInstruction() {
+            const list = document.getElementById('careList');
+            const item = document.createElement('div');
+            item.className = 'dynamic-item';
+            item.innerHTML = `
+                <input type="text" class="form-input" placeholder="Care instruction">
+                <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+            `;
+            list.appendChild(item);
+        }
+
+        // Add image input
+        function addImageInput() {
+            const container = document.getElementById('imageInputs');
+            const item = document.createElement('div');
+            item.className = 'dynamic-item';
+            
+            // Calculate next image number
+            const existingImages = container.querySelectorAll('.dynamic-item');
+            const nextImageNumber = existingImages.length + 1;
+            
+            const slug = document.getElementById('productSlug').value;
+            let defaultPath = `images/products/image-${nextImageNumber}.jpg`;
+            
+            if (slug) {
+                const basePath = `images/products/${nextProductId}-${slug}`;
+                defaultPath = `${basePath}/${nextProductId}-${slug}-${nextImageNumber}.jpg`;
+            }
+            
+            item.innerHTML = `
+                <input type="text" class="form-input" value="${defaultPath}">
+                <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+            `;
+            container.appendChild(item);
+        }
+
+        // Remove item
+        function removeItem(button) {
+            button.parentElement.remove();
+        }
+
+        // Remove spec item
+        function removeSpecItem(button) {
+            button.parentElement.remove();
+        }
+
+        // Validate form
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = [
+                { id: 'productName', errorId: 'nameError' },
+                { id: 'productSlug', errorId: 'slugError' },
+                { id: 'productMRP', errorId: 'mrpError' },
+                { id: 'productPrice', errorId: 'priceError' },
+                { id: 'productCategory', errorId: 'categoryError' },
+                { id: 'mainImage', errorId: 'imageError' }
+            ];
+
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const error = document.getElementById(field.errorId);
+                
+                if (!input.value.trim() || ((field.id === 'productPrice' || field.id === 'productMRP') && input.value <= 0)) {
+                    input.classList.add('error');
+                    error.classList.add('show');
+                    isValid = false;
+                } else {
+                    input.classList.remove('error');
+                    error.classList.remove('show');
+                }
+            });
+            
+            // Validate that selling price is less than or equal to MRP
+            const mrp = parseFloat(document.getElementById('productMRP').value);
+            const price = parseFloat(document.getElementById('productPrice').value);
+            
+            if (price > mrp) {
+                document.getElementById('productPrice').classList.add('error');
+                document.getElementById('priceError').textContent = 'Selling price cannot be greater than MRP';
+                document.getElementById('priceError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('priceError').textContent = 'Valid price is required';
+            }
+
+            return isValid;
+        }
+
+        // Generate JSON
+        function generateJSON() {
+            if (!validateForm()) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Collect features
+            const features = [];
+            document.querySelectorAll('#featuresList .dynamic-item input').forEach(input => {
+                if (input.value.trim()) {
+                    features.push(input.value.trim());
+                }
+            });
+
+            // Collect specifications
+            const specifications = {};
+            document.querySelectorAll('#specsList .spec-group').forEach(group => {
+                const inputs = group.querySelectorAll('input');
+                if (inputs[0].value.trim() && inputs[1].value.trim()) {
+                    specifications[inputs[0].value.trim()] = inputs[1].value.trim();
+                }
+            });
+
+            // Collect care instructions
+            const careInstructions = [];
+            document.querySelectorAll('#careList .dynamic-item input').forEach(input => {
+                if (input.value.trim()) {
+                    careInstructions.push(input.value.trim());
+                }
+            });
+
+            // Collect images (gallery includes main image as first image + additional gallery images)
+            const images = [];
+            document.querySelectorAll('#imageInputs .dynamic-item input').forEach(input => {
+                if (input.value.trim()) {
+                    images.push(input.value.trim());
+                }
+            });
+
+            // Create product object
+            generatedProduct = {
+                id: nextProductId,
+                name: document.getElementById('productName').value.trim(),
+                slug: document.getElementById('productSlug').value.trim(),
+                mrp: parseInt(document.getElementById('productMRP').value),
+                price: parseInt(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value.trim(),
+                image: document.getElementById('mainImage').value.trim(),
+                images: images.length > 0 ? images : [document.getElementById('mainImage').value.trim()],
+                description: document.getElementById('productDescription').value.trim(),
+                detailedDescription: document.getElementById('productDetailedDescription').value.trim(),
+                features: features,
+                specifications: specifications,
+                careInstructions: careInstructions,
+                inStock: document.getElementById('inStock').checked
+            };
+
+            // Display JSON
+            const jsonString = JSON.stringify(generatedProduct, null, 2);
+            document.getElementById('jsonOutput').textContent = jsonString;
+            document.getElementById('outputSection').classList.add('show');
+            
+            // Scroll to output
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+            
+            showNotification('JSON generated successfully!', 'success');
+        }
+
+        // Copy JSON to clipboard
+        function copyJSON() {
+            const jsonText = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                showNotification('JSON copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('Failed to copy JSON', 'error');
+            });
+        }
+
+        // Download JSON
+        function downloadJSON() {
+            if (!generatedProduct) {
+                showNotification('Please generate JSON first', 'error');
+                return;
+            }
+
+            const jsonString = JSON.stringify(generatedProduct, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `product-${generatedProduct.slug}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('JSON file downloaded!', 'success');
+        }
+
+        // Append to products.json (Note: This requires server-side support)
+        function appendToFile() {
+            if (!generatedProduct) {
+                showNotification('Please generate JSON first', 'error');
+                return;
+            }
+
+            showNotification('Note: Appending requires manual copy-paste or server-side implementation. Use "Copy JSON" button and manually add to products.json file.', 'error');
+        }
+
+        // Reset form
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+                document.getElementById('productForm').reset();
+                document.getElementById('featuresList').innerHTML = `
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Feature 1">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                `;
+                document.getElementById('specsList').innerHTML = `
+                    <div class="spec-group">
+                        <input type="text" class="form-input" placeholder="Specification Key">
+                        <input type="text" class="form-input" placeholder="Specification Value">
+                    </div>
+                `;
+                document.getElementById('careList').innerHTML = `
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Care instruction 1">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                `;
+                document.getElementById('imageInputs').innerHTML = `
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Auto-generated">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Auto-generated">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Auto-generated">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Auto-generated">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Auto-generated">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                    <div class="dynamic-item">
+                        <input type="text" class="form-input" placeholder="Auto-generated">
+                        <button type="button" class="btn-small btn-remove" onclick="removeItem(this)">Remove</button>
+                    </div>
+                `;
+                document.getElementById('outputSection').classList.remove('show');
+                generatedProduct = null;
+                
+                // Clear all error states
+                document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(el => {
+                    el.classList.remove('error');
+                });
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.classList.remove('show');
+                });
+                
+                loadNextId();
+                showNotification('Form reset successfully', 'success');
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadNextId();
+        });
+    </script>
+</body>
+</html>

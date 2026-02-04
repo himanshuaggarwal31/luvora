@@ -19,17 +19,28 @@ function createProductCard(product) {
     const stockClass = product.inStock ? 'in-stock' : 'out-of-stock';
     const stockText = product.inStock ? '✓ In Stock' : '✗ Out of Stock';
     
+    // Calculate discount percentage
+    const discount = product.mrp ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0;
+    const discountBadge = discount > 0 ? `<span class="discount-badge">${discount}% OFF</span>` : '';
+    
     return `
         <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image">
-                <span>🛏️</span>
-            </div>
-            <div class="product-info">
-                <p class="product-category">${product.category}</p>
-                <h3 class="product-name">${product.name}</h3>
-                <p class="product-price">₹${product.price.toLocaleString('en-IN')}</p>
-                <p class="product-stock ${stockClass}">${stockText}</p>
-            </div>
+            <a href="product-detail.html?id=${product.id}" class="product-link">
+                <div class="product-image">
+                    ${discountBadge}
+                    <span>🛏️</span>
+                </div>
+                <div class="product-info">
+                    <p class="product-category">${product.category}</p>
+                    <h3 class="product-name">${product.name}</h3>
+                    <div class="product-pricing">
+                        ${product.mrp ? `<span class="product-mrp">₹${product.mrp.toLocaleString('en-IN')}</span>` : ''}
+                        <span class="product-price">₹${product.price.toLocaleString('en-IN')}</span>
+                    </div>
+                    <p class="product-stock ${stockClass}">${stockText}</p>
+                    <button class="btn btn-small">View Details</button>
+                </div>
+            </a>
         </div>
     `;
 }

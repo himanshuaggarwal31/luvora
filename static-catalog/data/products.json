@@ -3,10 +3,17 @@
     "id": 1,
     "name": "Premium Cotton Bedsheet",
     "slug": "premium-cotton-bedsheet",
+    "mrp": 3999,
     "price": 2599,
     "category": "Bedsheets",
     "image": "images/products/bedsheet-1.jpg",
+    "images": [
+      "images/products/bedsheet-1.jpg",
+      "images/products/bedsheet-1.jpg",
+      "images/products/bedsheet-1.jpg"
+    ],
     "description": "Luxurious 100% cotton bedsheet with 400 thread count. Soft, breathable, and durable. Available in multiple colors.",
+    "detailedDescription": "Experience ultimate comfort with our Premium Cotton Bedsheet. Made from 100% long-staple cotton, this bedsheet offers exceptional softness and durability. The 400 thread count ensures a luxurious feel while maintaining breathability for a comfortable night's sleep. Perfect for all seasons, these bedsheets get softer with every wash.",
     "features": [
       "100% Premium Cotton",
       "400 Thread Count",
@@ -14,16 +21,39 @@
       "Fade Resistant",
       "Queen Size (90x100 inches)"
     ],
+    "specifications": {
+      "Material": "100% Premium Cotton",
+      "Thread Count": "400 TC",
+      "Size": "Queen (90x100 inches)",
+      "Weight": "600 GSM",
+      "Color Options": "White, Cream, Blue, Grey",
+      "Care": "Machine Washable",
+      "Package Includes": "1 Bedsheet"
+    },
+    "careInstructions": [
+      "Machine wash in cold water with similar colors",
+      "Use mild detergent, avoid bleach",
+      "Tumble dry on low or line dry",
+      "Iron on medium heat if needed",
+      "Do not dry clean"
+    ],
     "inStock": true
   },
   {
     "id": 2,
     "name": "Floral Print Bedsheet Set",
     "slug": "floral-print-bedsheet",
+    "mrp": 5999,
     "price": 3999,
     "category": "Bedsheets",
     "image": "images/products/bedsheet-2.jpg",
+    "images": [
+      "images/products/bedsheet-2.jpg",
+      "images/products/bedsheet-2.jpg",
+      "images/products/bedsheet-2.jpg"
+    ],
     "description": "Beautiful floral print bedsheet set with 2 pillow covers. Premium microfiber fabric with vibrant colors.",
+    "detailedDescription": "Transform your bedroom into a floral paradise with this stunning bedsheet set. Crafted from premium microfiber fabric, it features vibrant, fade-resistant colors that stay beautiful wash after wash. The set includes 2 matching pillow covers for a complete coordinated look. Wrinkle-resistant and easy to maintain.",
     "features": [
       "Microfiber Fabric",
       "Includes 2 Pillow Covers",
@@ -31,16 +61,39 @@
       "Anti-Wrinkle",
       "King Size (108x108 inches)"
     ],
+    "specifications": {
+      "Material": "Premium Microfiber",
+      "Thread Count": "300 TC",
+      "Size": "King (108x108 inches)",
+      "Weight": "500 GSM",
+      "Print": "Floral Design",
+      "Care": "Machine Washable",
+      "Package Includes": "1 Bedsheet + 2 Pillow Covers"
+    },
+    "careInstructions": [
+      "Machine wash in cold water",
+      "Wash dark colors separately for first wash",
+      "Do not bleach",
+      "Tumble dry low",
+      "Iron on low temperature if needed"
+    ],
     "inStock": true
   },
   {
     "id": 3,
     "name": "Luxury Silk Bedsheet",
     "slug": "luxury-silk-bedsheet",
+    "mrp": 12999,
     "price": 7999,
     "category": "Bedsheets",
     "image": "images/products/bedsheet-3.jpg",
+    "images": [
+      "images/products/bedsheet-3.jpg",
+      "images/products/bedsheet-3.jpg",
+      "images/products/bedsheet-3.jpg"
+    ],
     "description": "Ultra-premium silk bedsheet for the ultimate sleep experience. Hypoallergenic and temperature regulating.",
+    "detailedDescription": "Indulge in luxury with our 100% Mulberry Silk Bedsheet. This premium silk naturally regulates temperature, keeping you cool in summer and warm in winter. The smooth, hypoallergenic surface is gentle on skin and hair, reducing friction and preventing wrinkles. Perfect for those with sensitive skin or allergies. Experience the difference that true luxury makes in your sleep quality.",
     "features": [
       "100% Mulberry Silk",
       "Hypoallergenic",
@@ -48,16 +101,39 @@
       "Luxurious Feel",
       "King Size"
     ],
+    "specifications": {
+      "Material": "100% Grade 6A Mulberry Silk",
+      "Momme Weight": "22 Momme",
+      "Size": "King (108x108 inches)",
+      "Color": "Champagne, Silver, Navy",
+      "Hypoallergenic": "Yes",
+      "Care": "Hand Wash or Dry Clean",
+      "Package Includes": "1 Silk Bedsheet"
+    },
+    "careInstructions": [
+      "Hand wash in cold water with silk-safe detergent",
+      "Or dry clean for best results",
+      "Do not bleach or use harsh chemicals",
+      "Air dry flat, away from direct sunlight",
+      "Iron on silk setting if needed (use cloth barrier)"
+    ],
     "inStock": true
   },
   {
     "id": 4,
     "name": "Memory Foam Pillow",
     "slug": "memory-foam-pillow",
+    "mrp": 2499,
     "price": 1499,
     "category": "Pillows",
     "image": "images/products/pillow-1.jpg",
+    "images": [
+      "images/products/pillow-1.jpg",
+      "images/products/pillow-1.jpg",
+      "images/products/pillow-1.jpg"
+    ],
     "description": "Ergonomic memory foam pillow for neck and spine support. Perfect for side and back sleepers.",
+    "detailedDescription": "Wake up refreshed with our Ergonomic Memory Foam Pillow. Designed by sleep experts, this pillow provides optimal cervical support to align your spine and reduce neck pain. The premium memory foam contours to your unique head and neck shape, providing personalized comfort throughout the night. The breathable cover keeps you cool and comfortable all night long.",
     "features": [
       "Memory Foam Technology",
       "Cervical Support",
@@ -65,22 +141,61 @@
       "Removable & Washable",
       "Standard Size"
     ],
+    "specifications": {
+      "Material": "High-Density Memory Foam",
+      "Cover Material": "Breathable Polyester Blend",
+      "Size": "Standard (24x16 inches)",
+      "Height": "5 inches (adjustable)",
+      "Firmness": "Medium-Firm",
+      "Suitable For": "Side & Back Sleepers",
+      "Certifications": "CertiPUR-US Certified"
+    },
+    "careInstructions": [
+      "Remove and wash pillow cover regularly",
+      "Machine wash cover in cold water",
+      "Do not wash memory foam core",
+      "Spot clean foam with damp cloth if needed",
+      "Air out pillow monthly for freshness"
+    ],
     "inStock": true
   },
   {
     "id": 5,
     "name": "Winter Comforter",
     "slug": "winter-comforter",
+    "mrp": 7999,
     "price": 5499,
     "category": "Comforters",
     "image": "images/products/comforter-1.jpg",
+    "images": [
+      "images/products/comforter-1.jpg",
+      "images/products/comforter-1.jpg",
+      "images/products/comforter-1.jpg"
+    ],
     "description": "Ultra-warm winter comforter with microfiber filling. Lightweight yet incredibly cozy for cold nights.",
+    "detailedDescription": "Stay warm and cozy all winter long with our Premium Winter Comforter. Filled with high-quality microfiber that mimics down's warmth without the allergens. The unique quilting pattern keeps the filling evenly distributed, preventing cold spots. Lightweight design doesn't weigh you down while providing exceptional warmth. Perfect for those chilly winter nights.",
     "features": [
       "Microfiber Filling",
       "Lightweight & Warm",
       "All Season Use",
       "Machine Washable",
       "Queen Size"
+    ],
+    "specifications": {
+      "Material": "Premium Microfiber",
+      "Filling": "Down-Alternative Microfiber",
+      "Size": "Queen (90x100 inches)",
+      "Weight": "2.5 kg",
+      "Warmth Level": "Winter (Heavy)",
+      "Construction": "Box-Stitched Quilting",
+      "Package Includes": "1 Comforter"
+    },
+    "careInstructions": [
+      "Machine wash on gentle cycle with cold water",
+      "Use large capacity washer for best results",
+      "Tumble dry on low heat with dryer balls",
+      "Fluff regularly to maintain loft",
+      "Professional cleaning recommended annually"
     ],
     "inStock": true
   }
