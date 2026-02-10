@@ -198,5 +198,34 @@
       "Professional cleaning recommended annually"
     ],
     "inStock": true
+  },
+  {
+  "id": 6,
+  "name": "floral comforter",
+  "slug": "floral-comforter",
+  "mrp": 9999,
+  "price": 6999,
+  "category": "Comforter",
+  "image": "images/products/6-floral-comforter/6-floral-comforter-main.jpg",
+  "images": [
+    "images/products/6-floral-comforter/6-floral-comforter-1.jpg",
+    "images/products/6-floral-comforter/6-floral-comforter-2.jpg",
+    "images/products/6-floral-comforter/6-floral-comforter-3.jpg",
+    "images/products/6-floral-comforter/6-floral-comforter-4.jpg",
+    "images/products/6-floral-comforter/6-floral-comforter-5.jpg",
+    "images/products/6-floral-comforter/6-floral-comforter-6.jpg"
+  ],
+  "description": "ABC",
+  "detailedDescription": "DD ABC",
+  "features": [
+    "YY"
+  ],
+  "specifications": {
+    "NN": "nn"
+  },
+  "careInstructions": [
+    "MMM"
+  ],
+  "inStock": true
   }
 ]

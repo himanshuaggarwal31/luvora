@@ -747,6 +747,9 @@ About:     https://d123456abcdef.cloudfront.net/about.html
 
     ## Testing & Verification
 
+    > **💡 TIP: Always test locally first!**  
+    > Run `python -m http.server 8080` from static-catalog folder, test at `http://localhost:8080`, then upload to S3.
+
     ### Step-by-Step Testing Checklist
 
     1. **✅ S3 Bucket Test** (HTTP):
