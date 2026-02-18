@@ -28,7 +28,7 @@ function createProductCard(product) {
             <a href="product-detail.html?id=${product.id}" class="product-link">
                 <div class="product-image">
                     ${discountBadge}
-                    <span>🛏️</span>
+                    <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                 </div>
                 <div class="product-info">
                     <p class="product-category">${product.category}</p>
